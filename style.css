@@ -28,6 +28,7 @@ body{
     align-content: center;
     flex-direction: column;
     overflow-x: hidden;
+    padding: 0 0 0 20px;
 }
 
 #head{
