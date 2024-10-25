@@ -22,18 +22,6 @@ $conn->set_charset("utf8");
 // Überprüfen der Verbindung
 if ($conn->connect_error) {
     die("Verbindung fehlgeschlagen: " . $conn->connect_error);
+}else{
+    echo "Succesfully connected to " . $dbDatabase;
 }
-
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
