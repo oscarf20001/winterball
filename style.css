@@ -1,0 +1,205 @@
+:root{
+    --black: #000;
+    --primary: #09192D;
+    --secondary: #52c393;
+    --hover: #08164b;
+    --border: #eee;
+    --borderHover: #aaa;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    /*background: linear-gradient(135deg, #081b4b,#09192D);*/
+    background-color: #081b4b;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+#head{
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+#head::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1px;
+    width: 95%;
+    background-color: white;
+}
+
+.input-field {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    margin: 7px 0;
+}
+
+.input-field label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s ease;
+}
+
+.input-field input,
+.input-field select {
+  width: 100%;
+  height: 40px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #52C393;
+}
+
+.input-field input::-webkit-outer-spin-button,
+.input-field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-field select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 10px;
+}
+
+.input-field select:focus~label,
+.input-field input:focus~label,
+.input-field input:valid~label,
+.input-field select:valid~label {
+  font-size: 0.8rem;
+  top: 10px;
+  transform: translateY(-120%);
+  color: #52C393;
+}
+
+input[type="submit"] {
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 16px;
+  border: 2px solid transparent;
+  transition: 0.3s ease;
+}
+
+input[type="submit"]:hover {
+  color: #fff;
+  border-color: #fff;
+  background-color: #52C393;
+}
+
+body form .aboutYou .aboutYouInputs{
+    display: grid;
+    grid-template-areas: 
+    "name name vorname vorname"
+    "email email telnummer telnummer"
+    "age klasse ticket ticket";
+    /* Vier Spalten mit je 25vw */
+    grid-template-columns: calc((100vw - 45px) / 4) calc((100vw - 45px) / 4) calc((100vw - 45px) / 4) calc((100vw - 45px) / 4);
+    gap: 15px; /* Abstand zwischen den Grid-Items */
+    width: 100vw;
+    margin: 25px 0 0 0;
+}
+
+body form .aboutYou .aboutYouInputs .input-field{
+    width: 100%;
+}
+
+body form .aboutYou .aboutYouInputs .name{
+    grid-area: name;
+}
+
+body form .aboutYou .aboutYouInputs .vorname{
+    grid-area: vorname;
+}
+
+body form .aboutYou .aboutYouInputs .email{
+    grid-area: email;
+}
+
+body form .aboutYou .aboutYouInputs .age{
+    grid-area: age;
+}
+
+body form .aboutYou .aboutYouInputs .telNumber{
+    grid-area: telnummer;
+}
+
+body form .aboutYou .aboutYouInputs .klasse{
+    grid-area: klasse;
+}
+
+body form .aboutYou .aboutYouInputs .cntTickets{
+    grid-area: ticket;
+}
+
+body form .aboutYou{
+    margin: 0 0 50px 0;
+}
+
+body form #ticketsContainer{
+    margin: 25px 0 0 0;
+}
+
+body form #ticketsContainer .ticket{
+    display: grid;
+    grid-template-areas:
+    "headline headline headline headline"
+    "name name vorname vorname"
+    "email email age age";
+    grid-template-columns: calc((100vw - 45px) / 4) calc((100vw - 45px) / 4) calc((100vw - 45px) / 4) calc((100vw - 45px) / 4);
+    gap: 15px; /* Abstand zwischen den Grid-Items */
+    width: 100vw;
+}
+
+body form #ticketsContainer .ticket h3{
+    grid-area: headline;
+}
+
+body form #ticketsContainer .ticket .ticketName{
+    grid-area: name;
+}
+
+body form #ticketsContainer .ticket .ticketVorname{
+    grid-area: vorname;
+}
+
+body form #ticketsContainer .ticket .ticketEmail{
+    grid-area: email;
+}
+
+body form #ticketsContainer .ticket .ticketAge{
+    grid-area: age;
+}
