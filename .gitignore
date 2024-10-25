@@ -16,3 +16,6 @@
 
 # Weitere sensitive Dateien
 myconfig.yml
+
+#testconnection 
+testConnection.php
