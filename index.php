@@ -215,5 +215,82 @@ if ($conn->connect_error) {
         });
 
     </script>
+
+    <?php
+
+    //DATEN AUS DEM FORMULAR ABRUFEN
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        //DATEN KÄUFER
+        $nachNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["nachname"]));
+        $vorNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["vorname"]));
+        $emailKäufer = htmlspecialchars($conn->real_escape_string($_POST["email"]));
+        $telNummerKäufer = htmlspecialchars($conn->real_escape_string($_POST["telNumber"]));
+        $ageKäufer = htmlspecialchars($conn->real_escape_string($_POST["age"]));
+        $klasseKäufer = htmlspecialchars($conn->real_escape_string($_POST["klasse"]));
+        $countTicketsKäufer = htmlspecialchars($conn->real_escape_string($_POST["cntTickets"]));
+
+        if($countTicketsKäufer == 2){
+            
+            //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER MEHR ALS EIN TICKET KAUFT
+            //DATEN TICKET NR.1
+            $nachNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
+            $vorNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+            $ageTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
+            $emailTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
+
+            //DATEN TICKET NR.2
+            $nachNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketName2"]));
+            $vorNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName2"]));
+            $ageTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge2"]));
+            $emailTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail2"]));
+            
+            //TESTAUSGABEN DATEN TICKET 1&2
+            echo "
+                <script>
+                    alert('Ticket1: $nachNameTicket1, $vorNameTicket1, $ageTicket1, $emailTicket1');
+                </script>
+            ";
+            echo "
+                <script>
+                    alert('Ticket2: $nachNameTicket2, $vorNameTicket2, $ageTicket2, $emailTicket2');
+                </script>
+            ";
+        }else{
+
+            //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER NUR EIN TICKET KAUFT
+            //DATEN TICKET
+            $nachNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
+            $vorNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+            $ageTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
+            $emailTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
+
+            //TESTAUSGABE DATEN TICKET 
+            echo "
+                <script>
+                    alert('Ticket1: $nachNameTicket, $vorNameTicket, $ageTicket, $emailTicket');
+                    console.log('Else-Block');
+                </script>
+            ";
+        }
+
+        //TESTAUSGABE DATEN KÄUFER
+        echo "
+            <script>
+                alert('Käufer: $nachNameKäufer, $vorNameKäufer, $emailKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer');
+            </script>
+        ";
+    }
+
+    
+    //PRÜFEN, OB EINGETRAGENE PERSON ZUGEHÖRIG ZUM MCG IST -> MITHILFE NAMENSLISTE SPORTFEST
+    //WENN EXTERN -> 15€; WENN INTERN -> 12€
+
+    //PRÜFEN, OB PERSON, FÜR DIE EIN TICKET AUSGESTELLT WERDEN SOLL, SCHON EIN TICKET HAT
+    //WENN TICKET SCHON VORHANDEN = X - CONFLICT
+
+    //PRÜFEN, OB NAME DER BEIDEN TICKETS UNTERSCHIEDLICH IST
+    
+    ?>
 </body>
 </html>
