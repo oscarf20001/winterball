@@ -236,60 +236,88 @@ if ($conn->connect_error) {
             //DATEN TICKET NR.1
             $nachNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
             $vorNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+            //KOMPLETTEN NAMEN ERSTELLEN
+            $vollständigNameTicket1 = $vorNameTicket1 . " " . $nachNameTicket1;
             $ageTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
             $emailTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
 
             //DATEN TICKET NR.2
             $nachNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketName2"]));
             $vorNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName2"]));
+            //KOMPLETTEN NAMEN ERSTELLEN
+            $vollständigNameTicket2 = $vorNameTicket2 . " " . $nachNameTicket2;
             $ageTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge2"]));
             $emailTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail2"]));
-            
-            //TESTAUSGABEN DATEN TICKET 1&2
-            echo "
-                <script>
-                    alert('Ticket1: $nachNameTicket1, $vorNameTicket1, $ageTicket1, $emailTicket1');
-                </script>
-            ";
-            echo "
-                <script>
-                    alert('Ticket2: $nachNameTicket2, $vorNameTicket2, $ageTicket2, $emailTicket2');
-                </script>
-            ";
+
         }else{
 
             //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER NUR EIN TICKET KAUFT
             //DATEN TICKET
             $nachNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
             $vorNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+            //KOMPLETTEN NAMEN ERSTELLEN
+            $vollständigNameTicket = $vorNameTicket . " " . $nachNameTicket;
+            if(checkNameKombinationOfMCG($vollständigNameTicket)){
+                echo "Name gefunden";
+            }else{
+                echo "Name nicht gefunden";
+            }
             $ageTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
             $emailTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
 
-            //TESTAUSGABE DATEN TICKET 
-            echo "
-                <script>
-                    alert('Ticket1: $nachNameTicket, $vorNameTicket, $ageTicket, $emailTicket');
-                    console.log('Else-Block');
-                </script>
-            ";
         }
-
-        //TESTAUSGABE DATEN KÄUFER
-        echo "
-            <script>
-                alert('Käufer: $nachNameKäufer, $vorNameKäufer, $emailKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer');
-            </script>
-        ";
     }
 
     
     //PRÜFEN, OB EINGETRAGENE PERSON ZUGEHÖRIG ZUM MCG IST -> MITHILFE NAMENSLISTE SPORTFEST
     //WENN EXTERN -> 15€; WENN INTERN -> 12€
 
+    function checkNameKombinationOfMCG($name) {
+        // Pfad zur CSV-Datei
+        $csvFile = 'data/Namen+16.csv';
+        
+        // Datei öffnen und Zeile für Zeile lesen
+        if (($handle = fopen($csvFile, "r")) !== false) {
+            // Erste Zeile (Header) überspringen
+            fgetcsv($handle); // Header-Zeile überspringen
+    
+            // Den gesuchten Namen aufteilen in Vorname und Nachname
+            $nameParts = explode(" ", trim($name));
+            $suchNachname = array_pop($nameParts); // Der letzte Teil ist der Nachname
+            $suchVorname = implode(" ", $nameParts); // Der Rest ist der Vorname
+    
+            // Durch alle Zeilen der CSV-Datei iterieren
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) { // Komma als Trennzeichen
+    
+                // Sicherstellen, dass beide Spalten vorhanden sind
+                $nachname = isset($data[0]) ? trim(str_replace(',', '', $data[0])) : '';
+                $vorname = isset($data[1]) ? trim(str_replace(',', '', $data[1])) : '';
+    
+                // Format "Vorname Nachname" erstellen
+                $fullName = $vorname . " " . $nachname;
+    
+                // Die Vornamen aufteilen und auf Übereinstimmung prüfen
+                $vornamenArray = explode(" ", $vorname);
+                // Überprüfen, ob einer der Vornamen mit dem gesuchten Vornamen übereinstimmt
+                foreach ($vornamenArray as $vname) {
+                    if (strcasecmp(trim($vname), trim($suchVorname)) === 0 && strcasecmp(trim($nachname), trim($suchNachname)) === 0) {
+                        fclose($handle); // Datei schließen
+                        return true; // Name gefunden
+                    }
+                }
+            }
+            fclose($handle); // Datei schließen
+        }
+        return false; // Name nicht gefunden
+    }    
+        
+
     //PRÜFEN, OB PERSON, FÜR DIE EIN TICKET AUSGESTELLT WERDEN SOLL, SCHON EIN TICKET HAT
     //WENN TICKET SCHON VORHANDEN = X - CONFLICT
 
     //PRÜFEN, OB NAME DER BEIDEN TICKETS UNTERSCHIEDLICH IST
+
+    //959155
     
     ?>
 </body>
