@@ -20,3 +20,5 @@ myconfig.yml
 
 #testconnection 
 testConnection.php
+
+data/*
