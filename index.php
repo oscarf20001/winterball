@@ -102,14 +102,14 @@ if ($conn->connect_error) {
                     <input type="text" id="" name="ticketVorName" required>
                     <label for="ticketVorName">Vorname:<sup>*</sup></label>
                 </div>
-                <!--<div class="input-field ticketEmail">
+                <div class="input-field ticketEmail">
                     <input type="email" id="" name="ticketEmail">
                     <label for="ticketEmail">Email:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketAge">
                     <input type="text" id="" name="ticketAge">
                     <label for="ticketAge">Alter:<sup>*</sup></label>
-                </div>-->
+                </div>
             </div>
         </div>
 
@@ -218,20 +218,12 @@ if ($conn->connect_error) {
 
     <?php
 
-    $nachNameKäufer = "";
-    $vorNameKäufer = "";
-    $emailKäufer = "";
-    $telNummerKäufer = "";
-    $ageKäufer = "";
-    $klasseKäufer = "";
-    $countTicketsKäufer = "";
-
         //DATEN AUS DEM FORMULAR ABRUFEN
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             //MAYBE MIT COOKIES ARBEITEN, UM DATEN DES KÄUFERS IM FORMULAR ZU SPEICHERN, DAMIT SIE NICHT VERLOREN GEHEN, WENN MAN ABSENDET UND ES EINEN ERROR GIBT? 
 
-            global $nachNameKäufer,$vorNameKäufer,$emailKäufer,$telNummerKäufer,$ageKäufer,$klasseKäufer,$countTicketsKäufer;
+            //global $nachNameKäufer,$vorNameKäufer,$emailKäufer,$telNummerKäufer,$ageKäufer,$klasseKäufer,$countTicketsKäufer;
             //DATEN KÄUFER
                 $nachNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["nachname"]));
                 $vorNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["vorname"]));
@@ -240,7 +232,7 @@ if ($conn->connect_error) {
                 $ageKäufer = htmlspecialchars($conn->real_escape_string($_POST["age"]));
                 $klasseKäufer = htmlspecialchars($conn->real_escape_string($_POST["klasse"]));
                 $countTicketsKäufer = htmlspecialchars($conn->real_escape_string($_POST["cntTickets"]));
-
+                
             //ANDERE VARIABLEN
                 $money = 0.00;
                 $money1 = 0.00;
@@ -303,7 +295,6 @@ if ($conn->connect_error) {
                     $row = $result->fetch_assoc();
 
                     if($row['count'] == 0){
-                        $stmt->close();
                         $stmt = $conn->prepare($isNameInDB);
                         // GO ON WITH CHECK TICKET 2
                         $stmt->bind_param("ss", $nachNameTicket2, $vorNameTicket2);
@@ -314,14 +305,58 @@ if ($conn->connect_error) {
                         $result = $stmt->get_result();
                         $row = $result->fetch_assoc();
                         if($row['count'] == 0){
-                            // GO ON WITH OTHER CODE
+                            // WRITE BOOTH TICKETS
+                            //TICKET 01: 
+                            if (checkCustomerIfExists($emailKäufer)) {
+                                //KUNDE EXISTIERT BEREITS
+                                //ID abrufen
+                                $customerId = getCustomerId($emailKäufer);
+    
+                                //TICKET SCHREIBEN
+                                if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
+                                    echo "Ticket wurde erfolgreich erstellt";
+                                }else{
+                                    echo "Ticket wurde nicht erstellt";
+                                }
+                            } else {
+                                //Käufer existiert noch nicht. Käufer erstellen. Id abrufen
+    
+                                //CREATE CUSTOMER
+                                $customerId = writeCustomer($vorNameKäufer,$nachNameKäufer,$emailKäufer,$ageKäufer,$telNummerKäufer,$klasseKäufer);
+    
+                                //TICKET AUF CUSTOMERID SCHREIBEN
+                                if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
+                                    echo "Ticket wurde erfolgreich erstellt";
+                                }else{
+                                    echo "Ticket wurde nicht erstellt";
+                                }
+                            }
 
-                            //if(checkCustomerIfExists($emailKäufer) != true){
-                            //  writeCustomer($vorNameKäufer, $nachNameKäufer, $emailKäufer, $ageKäufer, $telNummerKäufer, $klasseKäufer);
-                            //}
-                            //
-                            //$customerId_DB = getCustomerId($emailKäufer);
-                            //writeTicket();
+                            //TICKET 02:
+                            if (checkCustomerIfExists($emailKäufer)) {
+                                //KUNDE EXISTIERT BEREITS
+                                //ID abrufen
+                                $customerId = getCustomerId($emailKäufer);
+    
+                                //TICKET SCHREIBEN
+                                if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
+                                    echo "Ticket wurde erfolgreich erstellt";
+                                }else{
+                                    echo "Ticket wurde nicht erstellt";
+                                }
+                            } else {
+                                //Käufer existiert noch nicht. Käufer erstellen. Id abrufen
+    
+                                //CREATE CUSTOMER
+                                $customerId = writeCustomer($vorNameKäufer,$nachNameKäufer,$emailKäufer,$ageKäufer,$telNummerKäufer,$klasseKäufer);
+    
+                                //TICKET AUF CUSTOMERID SCHREIBEN
+                                if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
+                                    echo "Ticket wurde erfolgreich erstellt";
+                                }else{
+                                    echo "Ticket wurde nicht erstellt";
+                                }
+                            }
                         }else{
                             // NAME FOR TICKET 2 IS ALREADY IN USE
                             die("NAME FOR TICKET 2 IS ALREADY IN USE");
@@ -357,8 +392,36 @@ if ($conn->connect_error) {
                     $nachNameTicket = $resultTicket['lastName'];
                     $vorNameTicket = $resultTicket['preName'];
 
-                    echo $vorNameTicket . "<br>";
-                    echo $nachNameTicket . "<br>";
+                    if(checkIfNameOfTicketAlreadyExists($nachNameTicket,$vorNameTicket)){
+                        //TICKET EXISTIERT SCHON
+                        die("Ticket wurde schon auf diesen Namen ausgestellt");
+                    }else{
+                        //TICKET EXISTIERT NOCH NICHT
+                        if (checkCustomerIfExists($emailKäufer)) {
+                            //KUNDE EXISTIERT BEREITS
+                            //ID abrufen
+                            $customerId = getCustomerId($emailKäufer);
+
+                            //TICKET SCHREIBEN
+                            if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                echo "Ticket wurde erfolgreich erstellt";
+                            }else{
+                                echo "Ticket wurde nicht erstellt";
+                            }
+                        } else {
+                            //Käufer existiert noch nicht. Käufer erstellen. Id abrufen
+
+                            //CREATE CUSTOMER
+                            $customerId = writeCustomer($vorNameKäufer,$nachNameKäufer,$emailKäufer,$ageKäufer,$telNummerKäufer,$klasseKäufer);
+
+                            //TICKET AUF CUSTOMERID SCHREIBEN
+                            if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                echo "Ticket wurde erfolgreich erstellt";
+                            }else{
+                                echo "Ticket wurde nicht erstellt";
+                            }
+                        }
+                    }
 
                     //PRÜFEN, OB TICKET SCHON AUF DIESEN NAMEN AUSGESTELLT WURDE
                     //GET KÄUFER ID 
@@ -366,7 +429,36 @@ if ($conn->connect_error) {
                 }else{
                     $money = $money + 15.00;
                     //PRÜFEN, OB TICKET SCHON AUF DIESEN NAMEN AUSGESTELLT WURDE
-                    //checkIfNameOfTicketAlreadyExists($conn,$nachNameTicket,$vorNameTicket);
+                    if(checkIfNameOfTicketAlreadyExists($nachNameTicket,$vorNameTicket)){
+                        //TICKET EXISTIERT SCHON
+                        die("Ticket wurde schon auf diesen Namen ausgestellt");
+                    }else{
+                        //TICKET EXISTIERT NOCH NICHT
+                        if (checkCustomerIfExists($emailKäufer)) {
+                            //KUNDE EXISTIERT BEREITS
+                            //ID abrufen
+                            $customerId = getCustomerId($emailKäufer);
+
+                            //TICKET AUF CUSTOMERID SCHREIBEN
+                            if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                echo "Ticket wurde erfolgreich erstellt";
+                            }else{
+                                echo "Ticket wurde nicht erstellt";
+                            }
+                        } else {
+                            //Käufer existiert noch nicht. Käufer erstellen. Id abrufen
+
+                            //CREATE KÄUFER
+                            $customerId = writeCustomer($vorNameKäufer,$nachNameKäufer,$emailKäufer,$ageKäufer,$telNummerKäufer,$klasseKäufer);
+                            
+                            //TICKET AUF CUSTOMERID SCHREIBEN
+                            if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                echo "Ticket wurde erfolgreich erstellt";
+                            }else{
+                                echo "Ticket wurde nicht erstellt";
+                            }
+                        }
+                    }
                 }
             }
             echo "Der Preis für deine Tickets beträgt " . $money + $money1 + $money2 . ".00€";
@@ -422,35 +514,8 @@ if ($conn->connect_error) {
             return ['found' => false, 'fullName' => '', 'preName' => '', 'lastName' => ''];
         }
 
-        function checkIfNameOfTicketAlreadyExists($conn,$nachNameTicket,$vorNameTicket){
-            // SQL-Abfrage mit Platzhaltern für die Variablen
-            $isNameInDB = "SELECT COUNT(*) AS count FROM `tickets` WHERE `nachname` LIKE ? AND `vorname` LIKE ?";
-            // Die Abfrage vorbereiten
-            $stmt = $conn->prepare($isNameInDB);
-            $stmt->bind_param("ss", $nachNameTicket, $vorNameTicket);
-            //echo "DEBUG: Vorname Ticket 1: " . $vorNameTicket1 . "<br>";
-            //echo "DEBUG: Name Ticket 1: " . $nachNameTicket1 . "<br>";
-            // Abfrage ausführen
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-
-            if($row['count'] == 0){
-                if(checkCustomerIfExists($emailKäufer)){
-                    //writeCustomer($vorNameKäufer, $nachNameKäufer, $emailKäufer, $ageKäufer, $telNummerKäufer, $klasseKäufer);
-                    echo "Käufer würde erstellt werden <br>";
-                }else{
-                    echo "Wir landen hier";
-                }
-
-                //$customerId_DB = getCustomerId($emailKäufer);
-                //writeTicket();
-            }else{
-                echo "Name für dieses Ticket wird schon benutzt <br>";
-            }
-        }
-
         function checkCustomerIfExists($email){
+            global $conn, $emailKäufer, $nachNameKäufer, $vorNameKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer;
             // SQL-Abfrage mit Platzhaltern für die Variablen
             $doesCustomerExistsAlready = "SELECT COUNT(*) AS count FROM `käufer` WHERE `email` LIKE ?";
             // Die Abfrage vorbereiten
@@ -469,20 +534,84 @@ if ($conn->connect_error) {
             }
         }
 
+        function checkIfNameOfTicketAlreadyExists($nachNameTicket, $vorNameTicket) {
+            global $conn, $emailKäufer, $nachNameKäufer, $vorNameKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer;
+            
+            // SQL-Abfrage mit Platzhaltern für die Variablen
+            $isTicketAlreadyInUse = "SELECT COUNT(*) AS count FROM `tickets` WHERE `nachname` LIKE ? AND `vorname` LIKE ?";
+            
+            // Die Abfrage vorbereiten
+            $stmt = $conn->prepare($isTicketAlreadyInUse);
+            if (!$stmt) {
+                die("Fehler bei der Vorbereitung der SQL-Abfrage: " . $conn->error);
+            }
+            
+            // Bindet die Parameter
+            $stmt->bind_param("ss", $nachNameTicket, $vorNameTicket);
+            
+            // Abfrage ausführen
+            if (!$stmt->execute()) {
+                die("Fehler beim Ausführen der SQL-Abfrage: " . $stmt->error);
+            }
+            
+            // Ergebnis abrufen
+            $result = $stmt->get_result();
+            
+            $row = $result->fetch_assoc();
+            
+            if ($row['count'] == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function getCustomerId($email){
+            global $conn, $emailKäufer, $nachNameKäufer, $vorNameKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer;
+            $sqlGetIdFromCustomerUsingEmail = "SELECT `ID` FROM `käufer` WHERE `email` = ?";
+
+            $stmt = $conn->prepare($sqlGetIdFromCustomerUsingEmail);
+            $stmt->bind_param("s",$email);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $id = $result->fetch_assoc();
+
+            return (int)$id['ID'];
+
+            $stmt->close();
+        }
+
         function writeCustomer($customer_preName, $customer_lastName, $customer_email, $customer_age, $customer_telNr, $customer_claas){
-            $sql = "INSERT INTO `käufer` (`vorname`,`nachname`,`email`,`age`,`telNr`,`klasse`) VALUES (?,?,?,?,?,?)";
+            global $conn, $emailKäufer, $nachNameKäufer, $vorNameKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer;
+            $sqlWriteNewCustomer = "INSERT INTO `käufer` (`vorname`,`nachname`,`email`,`age`,`telNr`,`klasse`) VALUES (?,?,?,?,?,?)";
+
+            $stmt = $conn->prepare($sqlWriteNewCustomer);
+            //KÄUFER MIT DEN ÜBERGEBENEN VARIABLEN IN DIE DATENBANK SCHREIBEN
+            $stmt->bind_param("sssiss",$customer_preName, $customer_lastName, $customer_email, $customer_age, $customer_telNr, $customer_claas);
+            $stmt->execute();
+
+            //NACH ERSTELLEN DES KÄUFERS IN DER DATENBANK WIRD SOFORT DANACH SEINE ID ABGERUFEN UND RETURNED
+            return getCustomerId($customer_email);
+
+            $stmt->close();
         }
 
         function writeTicket($nachName_DB, $vorName_DB, $email_DB, $age_DB, $sum_DB, $käuferId_DB){
+            global $conn, $emailKäufer, $nachNameKäufer, $vorNameKäufer, $telNummerKäufer, $ageKäufer, $klasseKäufer, $countTicketsKäufer;
 
+            $sqlWriteNewTicket = "INSERT INTO `tickets` (`nachname`,`vorname`,`email`,`age`,`sum`,`käufer_ID`) VALUES (?,?,?,?,?,?)";
+
+            $stmt = $conn->prepare($sqlWriteNewTicket);
+            $stmt->bind_param("sssiii",$nachName_DB, $vorName_DB, $email_DB, $age_DB, $sum_DB, $käuferId_DB);
+            if($stmt->execute()){
+                return true;
+            }else{
+                die("Fehler beim Ausführen der SQL-Abfrage: " . $stmt->error);
+            }
         }
 
-        //PRÜFEN, OB PERSON, FÜR DIE EIN TICKET AUSGESTELLT WERDEN SOLL, SCHON EIN TICKET HAT
-        //WENN TICKET SCHON VORHANDEN = X - CONFLICT
-
-        //**TODO**: TABELLE BRAUCHT NOCH EINE SPALTE FÜR DIE KOSTEN DES TICKETS
-
-        //WENN CHECKS = SUCCESFULL -> EINTRAGEN DER DATEN
+        //**TODO**: TABELLE BRAUCHT NOCH EINE SPALTE FÜR DEN STATUS EINER BEZAHLUNG EINES TICKETS
         
     ?>
 </body>
