@@ -55,31 +55,31 @@ if ($conn->connect_error) {
             <div class="aboutYouInputs">
                 <!-- ABOUT YOU FORM -->
                 <div class="input-field name">
-                    <input type="text" id="name" name="nachname" >
+                    <input type="text" id="name" name="nachname" required>
                     <label for="nachname">Dein Nachname:<sup>*</sup></label>
                 </div>
                 <div class="input-field vorname">
-                    <input type="text" id="vorname" name="vorname" >
+                    <input type="text" id="vorname" name="vorname" required>
                     <label for="vorname">Dein Vorname:<sup>*</sup></label>
                 </div>
                 <div class="input-field email">
-                    <input type="email" id="email" name="email" >
+                    <input type="email" id="email" name="email" required>
                     <label for="email">Deine Email-Adresse:<sup>*</sup></label>
                 </div>
                 <div class="input-field telNumber">
-                    <input type="tel" id="telNumber" name="telNumber" >
+                    <input type="tel" id="telNumber" name="telNumber" required>
                     <label for="telNumber">Deine Telefonnummer:<sup>*</sup></label>
                 </div>
                 <div class="input-field age">
-                    <input type="number" id="age" name="age" >
+                    <input type="number" id="age" name="age" required>
                     <label for="age">Dein Alter:<sup>*</sup></label>
                 </div>
                 <div class="input-field klasse">
-                    <input type="text" id="klasse" name="klasse" >
+                    <input type="text" id="klasse" name="klasse" required>
                     <label for="klasse">Deine Klasse:<sup>*</sup> (Format: Klassenstufe/Zug)</label>
                 </div>
                 <div class="input-field cntTickets">
-                    <input type="number" id="cntTickets" name="cntTickets" min="1" max="3" >
+                    <input type="number" id="cntTickets" name="cntTickets" min="1" max="2" required>
                     <label for="cntTickets">Anzahl an Tickets:<sup>*</sup></label>
                 </div>
             </div>
@@ -103,11 +103,11 @@ if ($conn->connect_error) {
                     <label for="ticketVorName">Vorname:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketEmail">
-                    <input type="email" id="" name="ticketEmail">
+                    <input type="email" id="" name="ticketEmail" required>
                     <label for="ticketEmail">Email:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketAge">
-                    <input type="text" id="" name="ticketAge">
+                    <input type="text" id="" name="ticketAge" required>
                     <label for="ticketAge">Alter:<sup>*</sup></label>
                 </div>
             </div>
@@ -155,11 +155,11 @@ if ($conn->connect_error) {
                                 <label for="ticketVorName${i}">Vorname:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketEmail">
-                                <input type="email" name="ticketEmail${i}">
+                                <input type="email" name="ticketEmail${i}" required>
                                 <label for="ticketEmail${i}">Email:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketAge">
-                                <input type="text" name="ticketAge${i}">
+                                <input type="text" name="ticketAge${i}" required>
                                 <label for="ticketAge${i}">Alter:<sup>*</sup></label>
                             </div>
                         </div>
@@ -181,11 +181,11 @@ if ($conn->connect_error) {
                                 <label for="ticketVorName${count}">Vorname:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketEmail">
-                                <input type="email" name="ticketEmail${count}">
+                                <input type="email" name="ticketEmail${count}" required>
                                 <label for="ticketEmail${count}">Email:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketAge">
-                                <input type="text" name="ticketAge${count}">
+                                <input type="text" name="ticketAge${count}" required>
                                 <label for="ticketAge${count}">Alter:<sup>*</sup></label>
                             </div>
                         </div>
