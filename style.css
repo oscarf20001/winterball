@@ -354,7 +354,7 @@ body form #ticketsContainer .ticket .ticketAge{
         grid-template-areas: 
         "left left"
         "middle right";
-        margin: 0 0 25px 0;
+        margin: 0 0 10px 0;
     }
 
     #check .moneyBox{
