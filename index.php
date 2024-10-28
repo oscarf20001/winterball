@@ -75,7 +75,7 @@ if ($conn->connect_error) {
                     <label for="age">Dein Alter:<sup>*</sup></label>
                 </div>
                 <div class="input-field klasse">
-                    <input type="text" id="klasse" name="klasse" required>
+                    <input type="text" id="klasse" name="klasse">
                     <label for="klasse">Deine Klasse:<sup>*</sup> (Format: Klassenstufe/Zug)</label>
                 </div>
                 <div class="input-field cntTickets">
@@ -92,11 +92,11 @@ if ($conn->connect_error) {
         <!-- FORM TICKETS -->
         <div id="ticketsContainer">
             <div class="ticket">
-                <h3>Ticket Nr. <span>1</span></h3>
+                <h3 id="headlineTicket01">Ticket Nr. <span>1</span></h3>
 
                 <div class="input-field ticketName">
                     <input type="text" name="ticketName" required>
-                    <label for="ticketName">Name:<sup>*</sup></label>
+                    <label for="ticketName">Nachame:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketVorName">
                     <input type="text" id="" name="ticketVorName" required>
@@ -113,9 +113,85 @@ if ($conn->connect_error) {
             </div>
         </div>
 
-        <input type="submit" value="Daten absenden!">
-
+        <input type="button" value="Daten überprüfen!" id="checkData">
+        
     </form>
+    
+    <div id="check" style="display:none;">
+        <h1 id="HeadlineCheck">Bitte überprüfen Sie ihre eingegebenen Daten:</h1>
+        <div class="checkKäufer">
+            <div class="left">
+                <h2>Käufer:</h2>
+            </div>
+            <div class="middle">
+                <p>Nachname:</p>
+                <p>Vorname:</p>
+                <p>Email:</p>
+                <p>Telefonnummer:</p>
+                <p>Alter:</p>
+                <p id="checkKäuferClaas">Klasse (wenn Schüler des MCG):</p>
+                <p>Anzahl Tickets:</p>
+            </div>
+            <div class="right">
+                <p id="lastname0"></p>
+                <p id="prename0"></p>
+                <p id="mail0"></p>
+                <p id="telNr0"></p>
+                <p id="age0"></p>
+                <p id="claas0"></p>
+                <p id="count0"></p>
+            </div>
+        </div>
+        <div class="checkTicket01">
+            <div class="left">
+                <h2>Ticket 1:</h2>
+            </div>
+            <div class="middle">
+                <p>Nachname:</p>
+                <p>Vorname:</p>
+                <p>Email:</p>
+                <p>Alter:</p>
+            </div>
+            <div class="right">
+                <p id="lastnameCheck01"></p>
+                <p id="prenameCheck01"></p>
+                <p id="mailCheck01"></p>
+                <p id="ageCheck01"></p>
+            </div>
+        </div>
+        <div class="checkTicket02" id="checkTicket02" style="display:;">
+            <div class="left">
+                <h2>Ticket 2:</h2>
+            </div>
+            <div class="middle">
+                <p>Nachname:</p>
+                <p>Vorname:</p>
+                <p>Email:</p>
+                <p>Alter:</p>
+            </div>
+            <div class="right">
+                <p id="lastnameCheck02"></p>
+                <p id="prenameCheck02"></p>
+                <p id="mailCheck02"></p>
+                <p id="ageCheck02"></p>
+            </div>
+        </div>
+        <div class="moneyBox">
+            <div class="left">
+                <h2>Gesamtsumme</h2>
+            </div>
+            <div class="middle">
+                <p id="moneyTicket01">Ticket 1:</p>
+                <p id="moneyTicket02">Ticket 2:</p>
+                <p id="moneyBoxSum">Summe:</p>
+            </div>
+            <div class="right"></div>
+        </div>
+        <div class="buttons">
+            <input type="button" id="manipulateData" value="Daten korrigieren!">
+            <input type="submit" id="sendData" value="Daten absenden!" form="main">
+        </div>
+    </div>
 
     <script>
         // Sicherstellen, dass das DOM vollständig geladen ist
@@ -123,6 +199,9 @@ if ($conn->connect_error) {
             const cntTicketsInput = document.getElementById("cntTickets");
             const ticketsContainer = document.getElementById("ticketsContainer");
             const ticketCountDisplay = document.getElementById("ticketCountDisplay");
+
+            document.getElementById("manipulateData").style.display = "none";
+            document.getElementById("sendData").style.display = "none";
 
             function generateTickets(count) {
 
@@ -145,21 +224,21 @@ if ($conn->connect_error) {
                         ticketDiv.classList.add("ticket");
                         ticketDiv.innerHTML = `
                         <div class="ticket">
-                            <h3>Ticket Nr. <span>${i}</span></h3>
+                            <h3 id="headlineTicket0${i}">Ticket Nr. <span>${i}</span></h3>
                             <div class="input-field ticketName">
-                                <input type="text" name="ticketName${i}" required>
-                                <label for="ticketName${i}">Name:<sup>*</sup></label>
+                                <input type="text" id="name0${i}" name="ticketName${i}" required>
+                                <label for="ticketName${i}">Nachame:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketVorName">
-                                <input type="text" name="ticketVorName${i}" required>
+                                <input type="text" id="prename0${i}" name="ticketVorName${i}" required>
                                 <label for="ticketVorName${i}">Vorname:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketEmail">
-                                <input type="email" name="ticketEmail${i}" required>
+                                <input type="email" id="mail0${i}" name="ticketEmail${i}" required>
                                 <label for="ticketEmail${i}">Email:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketAge">
-                                <input type="text" name="ticketAge${i}" required>
+                                <input type="text" id="age0${i}" name="ticketAge${i}" required>
                                 <label for="ticketAge${i}">Alter:<sup>*</sup></label>
                             </div>
                         </div>
@@ -171,21 +250,21 @@ if ($conn->connect_error) {
                     ticketDiv.classList.add("ticket");
                     ticketDiv.innerHTML = `
                         <div class="ticket">
-                            <h3>Ticket Nr. <span>${count}</span></h3>
+                            <h3 id="headlineTicket01">Ticket Nr. <span>${count}</span></h3>
                             <div class="input-field ticketName">
-                                <input type="text" name="ticketName${count}" required>
-                                <label for="ticketName${count}">Name:<sup>*</sup></label>
+                                <input type="text" id="name01" name="ticketName${count}" required>
+                                <label for="ticketName${count}">Nachame:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketVorName">
-                                <input type="text" name="ticketVorName${count}" required>
+                                <input type="text" id="prename01" name="ticketVorName${count}" required>
                                 <label for="ticketVorName${count}">Vorname:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketEmail">
-                                <input type="email" name="ticketEmail${count}" required>
+                                <input type="email" id="mail01" name="ticketEmail${count}" required>
                                 <label for="ticketEmail${count}">Email:<sup>*</sup></label>
                             </div>
                             <div class="input-field ticketAge">
-                                <input type="text" name="ticketAge${count}" required>
+                                <input type="text" id="age01" name="ticketAge${count}" required>
                                 <label for="ticketAge${count}">Alter:<sup>*</sup></label>
                             </div>
                         </div>
@@ -213,6 +292,121 @@ if ($conn->connect_error) {
                 console.log('Overflow Element:', element); // Gibt das Element in der Konsole aus
             }
         });
+
+        document.getElementById("checkData").addEventListener('click', async function() {
+            document.getElementById("check").style.display = "flex";
+            let gesSumme = 0;
+
+            // Käuferinformationen festlegen
+            document.getElementById("lastname0").innerText = document.getElementById("name").value;
+            document.getElementById("prename0").innerText = document.getElementById("vorname").value;
+            document.getElementById("mail0").innerText = document.getElementById("email").value;
+            document.getElementById("telNr0").innerText = document.getElementById("telNumber").value;
+            document.getElementById("age0").innerText = document.getElementById("age").value;
+            document.getElementById("claas0").innerText = document.getElementById("klasse").value;
+            document.getElementById("count0").innerText = document.getElementById("cntTickets").value;
+
+            // Ticket 01 Informationen festlegen
+            document.getElementById("lastnameCheck01").innerText = document.getElementById("name01").value;
+            document.getElementById("prenameCheck01").innerText = document.getElementById("prename01").value;
+            document.getElementById("mailCheck01").innerText = document.getElementById("mail01").value;
+            document.getElementById("ageCheck01").innerText = document.getElementById("age01").value;
+
+            const ticketCount = parseInt(document.getElementById("cntTickets").value);
+
+            if (ticketCount === 2) {
+                // Ticket 02 anzeigen 
+                document.getElementById("moneyTicket02").style.display = "flex";
+                document.getElementById("checkTicket02").style.display = "grid";
+                
+                // Ticket 02 Infos festlegen
+                document.getElementById("lastnameCheck02").innerText = document.getElementById("name02")?.value || '';
+                document.getElementById("prenameCheck02").innerText = document.getElementById("prename02")?.value || '';
+                document.getElementById("mailCheck02").innerText = document.getElementById("mail02")?.value || '';
+                document.getElementById("ageCheck02").innerText = document.getElementById("age02")?.value || '';
+
+                // Preise abrufen
+                const price01 = await getTicketPrice(
+                    document.getElementById("prename01").value, 
+                    document.getElementById("name01").value
+                );
+
+                const price02 = await getTicketPrice(
+                    document.getElementById("prename02").value, 
+                    document.getElementById("name02").value
+                );
+
+                const gesSumme = price01 + price02;
+                document.getElementById("moneyTicket01").innerHTML = "Ticket 1: " + price01 + "€";
+                document.getElementById("moneyTicket02").innerHTML = "Ticket 2: " + price02 + "€";
+                document.getElementById("moneyBoxSum").innerText = "Summe: " + gesSumme + "€";
+            } else {
+                // Ticket 02 ausblenden
+                document.getElementById("checkTicket02").style.display = "none";
+                document.getElementById("moneyTicket02").style.display = "none";
+
+                const price01 = await getTicketPrice(
+                    document.getElementById("prename01").value, 
+                    document.getElementById("name01").value
+                );
+
+                document.getElementById("moneyTicket01").innerHTML = "Ticket 1: " + price01 + "€";
+                document.getElementById("moneyBoxSum").innerText = "Summe: " + price01 + "€";
+            }
+
+            document.getElementById("manipulateData").style.display = "flex";
+            document.getElementById("sendData").style.display = "flex";
+        });
+
+        if(window.innerWidth <= 768){
+            document.getElementById('HeadlineCheck').innerHTML = "Bitte überprüfen:"
+            document.getElementById('checkKäuferClaas').innerHTML = "Klasse"
+        }else{
+            document.getElementById('HeadlineCheck').innerHTML = "Bitte überprüfen Sie ihre eingegebenen Daten:"
+            document.getElementById('checkKäuferClaas').innerHTML = "Klasse (wenn Schüler des MCG):"
+        }
+
+
+        document.getElementById("manipulateData").addEventListener('click', function(){
+            document.getElementById("check").style.display = "none";
+        })
+
+        document.getElementById("sendData").addEventListener('click', function(){
+            document.getElementById("check").style.display = "none";
+        })
+
+        function getTicketPrice(prename, lastname) {
+            // Hole die Werte der Eingabefelder und kombiniere sie zum vollständigen Namen
+            const fullName = prename + " " + lastname;
+
+            // Sende eine POST-Anfrage an die PHP-Datei, um den Preis abzurufen
+            return fetch("getTicketPrice.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "fullName=" + encodeURIComponent(fullName)  // Den vollständigen Namen als Parameter senden
+            })
+            .then(response => response.text())  // Die Antwort als Text empfangen
+            .then(data => {
+                // Konvertiere die Antwort in einen Integer
+                const price = parseInt(data, 10);
+                
+                // Überprüfe, ob die Konvertierung erfolgreich war, sonst gebe eine Fehlermeldung aus
+                if (isNaN(price)) {
+                    //console.error('Fehler: Der Rückgabewert ist kein gültiger Integer.', data);
+                    return 0; // Wenn der Wert ungültig ist, null zurückgeben oder eine andere Aktion ausführen
+                }
+                
+                // Gib den Preis als Integer zurück
+                return price;
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
+                return null; // Bei Fehlern null zurückgeben oder eine andere Aktion ausführen
+            });
+        }
+
 
     </script>
 
@@ -314,7 +508,7 @@ if ($conn->connect_error) {
     
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
-                                    echo "Ticket wurde erfolgreich erstellt";
+                                    return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -326,7 +520,7 @@ if ($conn->connect_error) {
     
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
-                                    echo "Ticket wurde erfolgreich erstellt";
+                                    return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -340,7 +534,7 @@ if ($conn->connect_error) {
     
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
-                                    echo "Ticket wurde erfolgreich erstellt";
+                                    return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -352,24 +546,35 @@ if ($conn->connect_error) {
     
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
-                                    echo "Ticket wurde erfolgreich erstellt";
+                                    return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
                             }
                         }else{
                             // NAME FOR TICKET 2 IS ALREADY IN USE
-                            die("NAME FOR TICKET 2 IS ALREADY IN USE");
+                            // Beispielaufruf der Funktion, wenn der Name bereits verwendet wird
+                            $nameInUse = true;
+                            if ($nameInUse) {
+                                showAlert("NAME FOR TICKET 2 ALREADY IN USE");
+                                die;
+                            }
                         }
                     }else{
                         // NAME FOR TICKET 1 IS ALREADY IN USE
-                        die("NAME FOR TICKET 1 IS ALREADY IN USE");
+                        $nameInUse = true;
+                            if ($nameInUse) {
+                                showAlert("NAME FOR TICKET 1 ALREADY IN USE");
+                                die;
+                            }
                     }
                 }else{
                     //NAMEN DER BEIDEN TICKETS SIND GLEICH ODER EIN ANDERER UNBEKANNTER FEHLER IST AUFGETRETEN
-                    echo "DEBUG: Namen sind nicht unterschiedlich" . "<br>";
-                    echo "die";
-                    die;
+                    $sameNames = true;
+                    if ($sameNames) {
+                        showAlert("NAMES ARENT DIFFERENT");
+                        die;
+                    }
                 }
 
             }else{
@@ -394,7 +599,11 @@ if ($conn->connect_error) {
 
                     if(checkIfNameOfTicketAlreadyExists($nachNameTicket,$vorNameTicket)){
                         //TICKET EXISTIERT SCHON
-                        die("Ticket wurde schon auf diesen Namen ausgestellt");
+                        $nameInUse = true;
+                        if ($nameInUse) {
+                            showAlert("NAME FOR TICKET ALREADY IN USE");
+                            die;
+                        }
                     }else{
                         //TICKET EXISTIERT NOCH NICHT
                         if (checkCustomerIfExists($emailKäufer)) {
@@ -404,7 +613,7 @@ if ($conn->connect_error) {
 
                             //TICKET SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
-                                echo "Ticket wurde erfolgreich erstellt";
+                                return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -416,7 +625,7 @@ if ($conn->connect_error) {
 
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
-                                echo "Ticket wurde erfolgreich erstellt";
+                                return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -431,7 +640,11 @@ if ($conn->connect_error) {
                     //PRÜFEN, OB TICKET SCHON AUF DIESEN NAMEN AUSGESTELLT WURDE
                     if(checkIfNameOfTicketAlreadyExists($nachNameTicket,$vorNameTicket)){
                         //TICKET EXISTIERT SCHON
-                        die("Ticket wurde schon auf diesen Namen ausgestellt");
+                        $nameInUse = true;
+                        if ($nameInUse) {
+                            showAlert("NAME FOR TICKET ALREADY IN USE");
+                            die;
+                        }
                     }else{
                         //TICKET EXISTIERT NOCH NICHT
                         if (checkCustomerIfExists($emailKäufer)) {
@@ -441,7 +654,7 @@ if ($conn->connect_error) {
 
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
-                                echo "Ticket wurde erfolgreich erstellt";
+                                return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -453,7 +666,7 @@ if ($conn->connect_error) {
                             
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
-                                echo "Ticket wurde erfolgreich erstellt";
+                                return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -461,7 +674,6 @@ if ($conn->connect_error) {
                     }
                 }
             }
-            echo "Der Preis für deine Tickets beträgt " . $money + $money1 + $money2 . ".00€";
         }
 
         
@@ -505,13 +717,13 @@ if ($conn->connect_error) {
                     foreach ($vornamenArray as $vname) {
                         if (strcasecmp($vname, $suchVorname) === 0 && strcasecmp($nachname, $suchNachname) === 0) {
                             fclose($handle); // Datei schließen
-                            return ['found' => true, 'fullName' => $fullName, 'preName' => $vorname, 'lastName' => $nachname];
+                            return ['found' => true, 'fullName' => $fullName, 'preName' => $vorname, 'lastName' => $nachname, 'money' => 12];
                         }
                     }
                 }
                 fclose($handle); // Datei schließen
             }
-            return ['found' => false, 'fullName' => '', 'preName' => '', 'lastName' => ''];
+            return ['found' => false, 'fullName' => '', 'preName' => '', 'lastName' => '', 'money' => 15];
         }
 
         function checkCustomerIfExists($email){
@@ -611,7 +823,26 @@ if ($conn->connect_error) {
             }
         }
 
+        function showAlert($message) {
+            echo '
+            <div class="alerts" id="alerts">
+                <div class="contentAlerts">
+                    <h1>' . htmlspecialchars($message) . '</h1>
+                    <input type="button" value="Okay, ich werde die Namen abändern" id="alertButton">
+                </div>
+            </div>
+            <script>
+                document.getElementById("alertButton").addEventListener("click", function() {
+                    document.getElementById("alerts").style.display = "none";
+                });
+            </script>
+            ';
+        }
+
         //**TODO**: TABELLE BRAUCHT NOCH EINE SPALTE FÜR DEN STATUS EINER BEZAHLUNG EINES TICKETS
+        //**TODO**: ADMIN-PANEL
+        //**TODO**: POP-UP MIT PREIS 
+        //**TODO**: BESTÄTIGUNGSMAIL 
         
     ?>
 </body>

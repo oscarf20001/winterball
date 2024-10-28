@@ -1,15 +1,5 @@
 <?php
-
-$name = "Johanna Schub";
-
-if(checkNameKombinationOfMCG($name)){
-    echo "Name wurde gefunden: " . $name;
-}else{
-    echo "Name wurde nicht gefunden: " . $name;
-}
-
 function checkNameKombinationOfMCG($name) {
-    // Pfad zur CSV-Datei
     $csvFile = 'data/Namen+16.csv';
     
     // Datei öffnen und Zeile für Zeile lesen
@@ -24,7 +14,6 @@ function checkNameKombinationOfMCG($name) {
     
         // Durch alle Zeilen der CSV-Datei iterieren
         while (($data = fgetcsv($handle, 1000, ",")) !== false) { // Komma als Trennzeichen
-
             // Sicherstellen, dass beide Spalten vorhanden sind
             $nachname = isset($data[0]) ? trim(str_replace(',', '', $data[0])) : '';
             $vorname = isset($data[1]) ? trim(str_replace(',', '', $data[1])) : '';
@@ -35,7 +24,7 @@ function checkNameKombinationOfMCG($name) {
             // Prüfen, ob der gesamte Name übereinstimmt
             if (strcasecmp($fullName, $name) === 0) {
                 fclose($handle); // Datei schließen
-                return true; // Name gefunden
+                return ['found' => true, 'money' => 12];
             }
 
             // Die Vornamen aufteilen und prüfen, ob einer übereinstimmt
@@ -45,14 +34,30 @@ function checkNameKombinationOfMCG($name) {
             foreach ($vornamenArray as $vname) {
                 if (strcasecmp($vname, $suchVorname) === 0 && strcasecmp($nachname, $suchNachname) === 0) {
                     fclose($handle); // Datei schließen
-                    return true; // Name gefunden
+                    return ['found' => true, 'money' => 12];
                 }
             }
         }
         fclose($handle); // Datei schließen
     }
-    return false; // Name nicht gefunden
+    return ['found' => false, 'money' => 15];
 }
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Den vollständigen Namen aus dem POST-Request holen
+    $name = $_POST['fullName'];
 
+    // Überprüfen, ob der Name leer ist
+    if (empty(trim($name))) {
+        // Wenn der Name leer ist, den Preis auf 0 setzen
+        echo ['money' => 0]; // oder echo 0;
+        exit; // Stoppe die Ausführung des Scripts
+    }
+
+    // Die Funktion ausführen und das Ergebnis abrufen
+    $result = checkNameKombinationOfMCG($name);
+
+    // Rückgabe des Preises als Antwort
+    echo $result['money'];
+}
 ?>

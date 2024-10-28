@@ -1,6 +1,6 @@
 :root{
     --black: #000;
-    --primary: #09192D;
+    --primary: #081b4b;
     --secondary: #52c393;
     --hover: #08164b;
     --border: #eee;
@@ -102,7 +102,7 @@ body{
   color: #52C393;
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="button"]{
   background: #fff;
   color: #000;
   font-weight: 600;
@@ -115,10 +115,16 @@ input[type="submit"] {
   transition: 0.3s ease;
 }
 
-input[type="submit"]:hover {
-  color: #fff;
-  border-color: #fff;
-  background-color: #52C393;
+input[type="submit"]:hover{
+    color: #fff;
+    border-color: #fff;
+    background-color: #52C393;
+}
+
+input[type="button"]:hover {
+    color: #fff;
+    border-color: #fff;
+    background-color: #c35252;
 }
 
 body form .aboutYou .aboutYouInputs{
@@ -205,6 +211,86 @@ body form #ticketsContainer .ticket .ticketAge{
     grid-area: age;
 }
 
+#check{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    background-color: rgba(8, 27, 75,0.1);
+    backdrop-filter: blur(8px); /* Blur-Effekt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1; /* Über Form legen */
+}
+
+#check h1{
+    margin: 0 0 50px 0;
+}
+
+#check .checkKäufer, .checkTicket01, .checkTicket02, .moneyBox{
+    width: 50%;
+    display: flex;
+    margin: 0 0 75px 0;
+}
+
+#check .left{
+    width: 150px;
+    margin: 0 50px 0 0;
+}
+
+#check .middle{
+    width: 300px;
+}
+
+#check .moneyBox .middle #moneyBoxSum{
+    border-top: 1px solid white;
+    padding: 5px 0 0 0;
+}
+
+#check .buttons{
+    margin: 50px 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.alerts{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(8, 27, 75,0.1);
+    backdrop-filter: blur(8px); /* Blur-Effekt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1; /* Über Form legen */
+}
+
+.alerts .contentAlerts{
+    background-color: red;
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.alerts .contentAlerts input{
+    margin: 35px 0 0 0;
+}
+
 @media screen and (max-width: 768px){
     body form{
         max-width: 100vw;
@@ -239,5 +325,67 @@ body form #ticketsContainer .ticket .ticketAge{
         gap: 15px; /* Abstand zwischen den Grid-Items */
         width: 100vw;
         margin: 25px 0 0 0;
+    }
+
+    #check{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: calc(100% - 20px);
+        max-height: 100vh;
+        height: 100vh;
+        background-color: rgba(8, 27, 75,0.1);
+        backdrop-filter: blur(8px); /* Blur-Effekt */
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        flex-direction: column;
+        z-index: 1; /* Über Form legen */
+        margin: 0 0 0 10px;
+    }
+    
+    #check h1{
+        margin: 0 0 25px 0;
+    }
+    
+    #check .checkKäufer, .checkTicket01, .checkTicket02{
+        width: 100%;
+        display: grid;
+        grid-template-areas: 
+        "left left"
+        "middle right";
+        margin: 0 0 25px 0;
+    }
+
+    #check .moneyBox{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #check .left{
+        grid-area: left;
+    }
+    
+    #check .middle{
+        grid-area: middle;
+        width: 110px;
+    }
+
+    #check .right{
+        grid-area: right;
+    }
+    
+    #check .moneyBox .middle #moneyBoxSum{
+        border-top: 1px solid white;
+        padding: 5px 0 0 0;
+    }
+    
+    #check .buttons{
+        margin: 10px 0 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        gap: 5px;
     }
 }
