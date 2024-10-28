@@ -331,7 +331,6 @@ body form #ticketsContainer .ticket .ticketAge{
         position: fixed;
         top: 0;
         left: 0;
-        width: calc(100% - 20px);
         max-height: 100vh;
         height: 100vh;
         background-color: rgba(8, 27, 75,0.1);

@@ -317,7 +317,12 @@ if ($conn->connect_error) {
             if (ticketCount === 2) {
                 // Ticket 02 anzeigen 
                 document.getElementById("moneyTicket02").style.display = "flex";
-                document.getElementById("checkTicket02").style.display = "grid";
+
+                if(window.innerWidth <= 768){
+                    document.getElementById("checkTicket02").style.display = "grid";
+                }else{
+                    document.getElementById("checkTicket02").style.display = "flex";
+                }
                 
                 // Ticket 02 Infos festlegen
                 document.getElementById("lastnameCheck02").innerText = document.getElementById("name02")?.value || '';
