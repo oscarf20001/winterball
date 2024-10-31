@@ -228,13 +228,24 @@ body form #ticketsContainer .ticket .ticketAge{
 }
 
 #check h1{
-    margin: 0 0 50px 0;
+    margin: 0 0 25px 0;
+    position: relative;
+}
+
+#check h1::after{
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background-color: white;
 }
 
 #check .checkKäufer, .checkTicket01, .checkTicket02, .moneyBox{
     width: 50%;
     display: flex;
-    margin: 0 0 75px 0;
+    margin: 0 0 25px 0;
 }
 
 #check .left{
@@ -252,12 +263,16 @@ body form #ticketsContainer .ticket .ticketAge{
 }
 
 #check .buttons{
-    margin: 50px 0 0 0;
+    margin: 20px 0 0 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     gap: 50px;
+}
+
+#check .moneyBox{
+    margin: 0 0 20px 0;
 }
 
 .alerts{

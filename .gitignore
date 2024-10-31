@@ -22,3 +22,7 @@ myconfig.yml
 testConnection.php
 
 data/*
+
+senden.php
+mail.html
+mail.php
