@@ -912,7 +912,7 @@ if ($conn->connect_error) {
                     echo "<script>console.error('Emailversandt an Käufer fehlgeschlagen')";
                 }
 
-                for ($i = 0; $i < 2; $i++) { 
+                for ($i = 1; $i < 3; $i++) { 
                     if (mail($ticket[$i], $betreff, $nachricht, $header)) {
                         echo "<script>console.log('Email an Ticket".[$i]." versendet')";
                     }else{
