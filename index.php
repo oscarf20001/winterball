@@ -513,6 +513,8 @@ if ($conn->connect_error) {
     
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
+                                    //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                    sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, true, $mailTicket2, $vorNameTicket2);
                                     return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
@@ -525,6 +527,8 @@ if ($conn->connect_error) {
     
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
+                                    //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                    sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, true, $mailTicket2, $vorNameTicket2);
                                     return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
@@ -539,6 +543,8 @@ if ($conn->connect_error) {
     
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
+                                    //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                    sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, true, $mailTicket2, $vorNameTicket2);
                                     return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
@@ -551,6 +557,8 @@ if ($conn->connect_error) {
     
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
+                                    //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                    sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, true, $mailTicket2, $vorNameTicket2);
                                     return 0;
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
@@ -618,6 +626,8 @@ if ($conn->connect_error) {
 
                             //TICKET SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, false, "", "");
                                 return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
@@ -630,6 +640,8 @@ if ($conn->connect_error) {
 
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, false, "", "");
                                 return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
@@ -659,6 +671,8 @@ if ($conn->connect_error) {
 
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, false, "", "");
                                 return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
@@ -671,6 +685,8 @@ if ($conn->connect_error) {
                             
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
+                                //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
+                                sendMail($emailKäufer, $vorNameTicket, $emailTicket, $vorNameTicket, false, "", "");
                                 return 0;
                             }else{
                                 echo "Ticket wurde nicht erstellt";
@@ -842,6 +858,68 @@ if ($conn->connect_error) {
                 });
             </script>
             ';
+        }
+
+        function sendMail($käufer, $nameKäufer, $ticket1, $nameTicket1, $optionalTicket2, $ticket2, $nameTicket2){
+            //$name = htmlspecialchars(trim($_POST["name"]));
+            //$email = filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL);
+
+            $betreff = "Buchungsbestätigung - Winterball des MCGs 2024";
+
+            // E-Mail-Header
+            $header = "From: noreply@curiegymnasium.de\r\n";  // Absender-Adresse
+            $header .= "Reply-To: streiosc@curiegym.de\r\n";  // Antwort-Adresse
+
+            // Nachrichtentext der Buchungsbestätigung
+            $nachricht = "Hallo $nameKäufer,\n\n";
+            $nachricht .= "Vielen Dank für deine Buchung! Wir bestätigen hiermit, dass deine Anfrage eingegangen ist.\n";
+            $nachricht .= "Wir melden uns bei dir, falls weitere Informationen benötigt werden.\n\n";
+            $nachricht .= "Zusätzlich haben wir die Buchungsbestätigung an deine angebenen Emails des Tickets/der Tickets versendet.\n\n";
+            $nachricht .= "Mit freundlichen Grüßen,\n";
+            $nachricht .= "Gordon :)";
+
+            $nachrichtTicktet = "Hallo $nameTicket[$i],\n\n";
+            $nachrichtTicktet .= "Wir haben festgestellt, dass auf diese Email-Adresse (".$ticket[$i].") ein Ticket für den Winterball des MCGs 2024 gebucht wurde.\n\n";
+            $nachrichtTicktet .= "Falls das auch so sein sollte: .\n";
+            $nachrichtTicktet .= "Du brauchst nichts weiter machen.\n\n";
+            $nachrichtTicktet .= "Falls das NICHT so sein sollte: .\n";
+            $nachrichtTicktet .= "Antworte bitte auf diese Email und teile uns das Problem mit.\n\n";
+            $nachrichtTicktet .= "Mit freundlichen Grüßen,\n";
+            $nachrichtTicktet .= "Gordon :)";
+            
+            if(!$optionalTicket2){
+                //FALL, FÜR NUR ZWEI EMAILS (KÄUFER UND TICKET 1)
+                $i = 1;
+
+                if(mail($käufer, $betreff, $nachricht, $header)){
+                    echo "<script>console.log('Email an Käufer versendet')";
+
+                    if(mail($ticket[$i], $betreff, $nachrichtTicket, $header)){
+                        echo "<script>console.log('Email an Ticket versendet')";
+
+                    }else{
+                        echo "<script>console.error('Email versandt an Ticket fehlgeschlagen')";    
+                    }
+                }else{
+                    echo "<script>console.error('Email versandt an Käufer fehlgeschlagen')";
+
+                }
+            }else{
+                //FALL, FÜR DREI EMAILS (Käufer, Ticket1 und Ticket2)
+                if(mail($käufer, $betreff, $nachricht, $header)){
+                    echo "<script>console.log('Email an Käufer versendet')";
+                }else{
+                    echo "<script>console.error('Emailversandt an Käufer fehlgeschlagen')";
+                }
+
+                for ($i = 0; $i < 2; $i++) { 
+                    if (mail($ticket[$i], $betreff, $nachricht, $header)) {
+                        echo "<script>console.log('Email an Ticket".[$i]." versendet')";
+                    }else{
+                        echo "<script>console.error('Emailversand an Ticket".[$i]." fehlgeschlagen')";
+                    }
+                }                
+            }
         }
 
         //**TODO**: TABELLE BRAUCHT NOCH EINE SPALTE FÜR DEN STATUS EINER BEZAHLUNG EINES TICKETS
