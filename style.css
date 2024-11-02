@@ -220,7 +220,7 @@ html body form #checkData{
     margin: 0 0 50px 0;
 }
 
-#check{
+.check{
     position: fixed;
     top: 0;
     left: 0;
@@ -228,33 +228,33 @@ html body form #checkData{
     max-height: 100vh;
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
     z-index: 1; /* Über Form legen */
     scale: 0.9;
 }
 
-#check::after{
-    content: '';
+.upperCheck{
     position: fixed;
     top: 0;
     left: 0;
-    height: calc(100vh * 1.8);
-    width: calc(100vw * 1.8);
-    transform: translate(-20%, -20%);
-    z-index: -1;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
     background-color: rgba(8, 27, 75, 0.1);
     -webkit-backdrop-filter: blur(8px); /* Safari und ältere Webkit-Browser */
     backdrop-filter: blur(8px); /* Moderne Browser */
+    background-color: red;
+    display: flex;
+    justify-content: flex-start;
+    align-items: start;
 }
 
-#check h1{
+.check h1{
     margin: 0 0 25px 0;
     position: relative;
 }
 
-#check h1::after{
+.check h1::after{
     content: "";
     position: absolute;
     bottom: -5px;
@@ -264,27 +264,27 @@ html body form #checkData{
     background-color: white;
 }
 
-#check .checkKäufer, .checkTicket01, .checkTicket02, .moneyBox{
+.check .checkKäufer, .checkTicket01, .checkTicket02, .moneyBox{
     width: 50%;
     display: flex;
     margin: 0 0 25px 0;
 }
 
-#check .left{
+.check .left{
     width: 150px;
     margin: 0 50px 0 0;
 }
 
-#check .middle{
+.check .middle{
     width: 300px;
 }
 
-#check .moneyBox .middle #moneyBoxSum{
+.check .moneyBox .middle #moneyBoxSum{
     border-top: 1px solid white;
     padding: 5px 0 0 0;
 }
 
-#check .buttons{
+.check .buttons{
     margin: 20px 0 0 0;
     display: flex;
     justify-content: center;
@@ -293,7 +293,7 @@ html body form #checkData{
     gap: 50px;
 }
 
-#check .moneyBox{
+.check .moneyBox{
     margin: 0 0 20px 0;
 }
 

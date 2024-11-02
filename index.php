@@ -116,80 +116,81 @@ if ($conn->connect_error) {
         <input type="button" value="Daten überprüfen!" id="checkData">
         
     </form>
-    
-    <div id="check" style="display:none;">
-        <h1 id="HeadlineCheck">Bitte überprüfen Sie ihre eingegebenen Daten:</h1>
-        <div class="checkKäufer">
-            <div class="left">
-                <h2>Käufer:</h2>
+    <div class="upperCheck" id="check" style="display:none;">
+        <div class="check">
+            <h1 id="HeadlineCheck">Bitte überprüfen Sie ihre eingegebenen Daten:</h1>
+            <div class="checkKäufer">
+                <div class="left">
+                    <h2>Käufer:</h2>
+                </div>
+                <div class="middle">
+                    <p>Nachname:</p>
+                    <p>Vorname:</p>
+                    <p>Email:</p>
+                    <p>Telefonnummer:</p>
+                    <p>Alter:</p>
+                    <p id="checkKäuferClaas">Klasse (wenn Schüler des MCG):</p>
+                    <p>Anzahl Tickets:</p>
+                </div>
+                <div class="right">
+                    <p id="lastname0"></p>
+                    <p id="prename0"></p>
+                    <p id="mail0"></p>
+                    <p id="telNr0"></p>
+                    <p id="age0"></p>
+                    <p id="claas0"></p>
+                    <p id="count0"></p>
+                </div>
             </div>
-            <div class="middle">
-                <p>Nachname:</p>
-                <p>Vorname:</p>
-                <p>Email:</p>
-                <p>Telefonnummer:</p>
-                <p>Alter:</p>
-                <p id="checkKäuferClaas">Klasse (wenn Schüler des MCG):</p>
-                <p>Anzahl Tickets:</p>
+            <div class="checkTicket01">
+                <div class="left">
+                    <h2>Ticket 1:</h2>
+                </div>
+                <div class="middle">
+                    <p>Nachname:</p>
+                    <p>Vorname:</p>
+                    <p>Email:</p>
+                    <p>Alter:</p>
+                </div>
+                <div class="right">
+                    <p id="lastnameCheck01"></p>
+                    <p id="prenameCheck01"></p>
+                    <p id="mailCheck01"></p>
+                    <p id="ageCheck01"></p>
+                </div>
             </div>
-            <div class="right">
-                <p id="lastname0"></p>
-                <p id="prename0"></p>
-                <p id="mail0"></p>
-                <p id="telNr0"></p>
-                <p id="age0"></p>
-                <p id="claas0"></p>
-                <p id="count0"></p>
+            <div class="checkTicket02" id="checkTicket02" style="display:;">
+                <div class="left">
+                    <h2>Ticket 2:</h2>
+                </div>
+                <div class="middle">
+                    <p>Nachname:</p>
+                    <p>Vorname:</p>
+                    <p>Email:</p>
+                    <p>Alter:</p>
+                </div>
+                <div class="right">
+                    <p id="lastnameCheck02"></p>
+                    <p id="prenameCheck02"></p>
+                    <p id="mailCheck02"></p>
+                    <p id="ageCheck02"></p>
+                </div>
             </div>
-        </div>
-        <div class="checkTicket01">
-            <div class="left">
-                <h2>Ticket 1:</h2>
+            <div class="moneyBox">
+                <div class="left">
+                    <h2>Gesamtsumme</h2>
+                </div>
+                <div class="middle">
+                    <p id="moneyTicket01">Ticket 1:</p>
+                    <p id="moneyTicket02">Ticket 2:</p>
+                    <p id="moneyBoxSum">Summe:</p>
+                </div>
+                <div class="right"></div>
             </div>
-            <div class="middle">
-                <p>Nachname:</p>
-                <p>Vorname:</p>
-                <p>Email:</p>
-                <p>Alter:</p>
+            <div class="buttons">
+                <input type="button" id="manipulateData" value="Daten korrigieren!">
+                <input type="submit" id="sendData" value="Daten absenden!" form="main">
             </div>
-            <div class="right">
-                <p id="lastnameCheck01"></p>
-                <p id="prenameCheck01"></p>
-                <p id="mailCheck01"></p>
-                <p id="ageCheck01"></p>
-            </div>
-        </div>
-        <div class="checkTicket02" id="checkTicket02" style="display:;">
-            <div class="left">
-                <h2>Ticket 2:</h2>
-            </div>
-            <div class="middle">
-                <p>Nachname:</p>
-                <p>Vorname:</p>
-                <p>Email:</p>
-                <p>Alter:</p>
-            </div>
-            <div class="right">
-                <p id="lastnameCheck02"></p>
-                <p id="prenameCheck02"></p>
-                <p id="mailCheck02"></p>
-                <p id="ageCheck02"></p>
-            </div>
-        </div>
-        <div class="moneyBox">
-            <div class="left">
-                <h2>Gesamtsumme</h2>
-            </div>
-            <div class="middle">
-                <p id="moneyTicket01">Ticket 1:</p>
-                <p id="moneyTicket02">Ticket 2:</p>
-                <p id="moneyBoxSum">Summe:</p>
-            </div>
-            <div class="right"></div>
-        </div>
-        <div class="buttons">
-            <input type="button" id="manipulateData" value="Daten korrigieren!">
-            <input type="submit" id="sendData" value="Daten absenden!" form="main">
         </div>
     </div>
 
