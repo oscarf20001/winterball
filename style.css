@@ -228,9 +228,12 @@ html body form #checkData{
     max-height: 100vh;
     height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     z-index: 1; /* Über Form legen */
     scale: 0.9;
+    margin: 0 0 0 10px;
 }
 
 .upperCheck{
@@ -243,10 +246,10 @@ html body form #checkData{
     background-color: rgba(8, 27, 75, 0.1);
     -webkit-backdrop-filter: blur(8px); /* Safari und ältere Webkit-Browser */
     backdrop-filter: blur(8px); /* Moderne Browser */
-    background-color: red;
     display: flex;
     justify-content: flex-start;
     align-items: start;
+    margin: 0;
 }
 
 .check h1{
@@ -259,7 +262,7 @@ html body form #checkData{
     position: absolute;
     bottom: -5px;
     left: 0;
-    height: 1px;
+    height: 2px;
     width: 100%;
     background-color: white;
 }
@@ -364,7 +367,7 @@ html body form #checkData{
         margin: 25px 0 0 0;
     }
 
-    #check{
+    .check{
         position: fixed;
         top: 0;
         left: 0;
@@ -373,18 +376,18 @@ html body form #checkData{
         background-color: rgba(8, 27, 75,0.1);
         backdrop-filter: blur(8px); /* Blur-Effekt */
         display: flex;
-        justify-content: start;
-        align-items: start;
+        justify-content: flex-start;
+        align-items: flex-start;
         flex-direction: column;
         z-index: 1; /* Über Form legen */
-        margin: 0 0 0 10px;
+        margin: 0;
     }
     
-    #check h1{
+    .check h1{
         margin: 0 0 10px 0;
     }
     
-    #check .checkKäufer, .checkTicket01, .checkTicket02{
+    .check .checkKäufer, .checkTicket01, .checkTicket02{
         width: 100%;
         display: grid;
         grid-template-areas: 
@@ -393,34 +396,34 @@ html body form #checkData{
         margin: 0 0 10px 0;
     }
 
-    #check .moneyBox{
+    .check .moneyBox{
         display: flex;
         flex-direction: column;
     }
     
-    #check .left{
+    .check .left{
         grid-area: left;
     }
     
-    #check .middle{
+    .check .middle{
         grid-area: middle;
         width: 110px;
     }
 
-    #check .right{
+    .check .right{
         grid-area: right;
     }
 
-    #check .moneyBox{
+    .check .moneyBox{
         margin: 0 0 0 0;
     }
     
-    #check .moneyBox .middle #moneyBoxSum{
+    .check .moneyBox .middle #moneyBoxSum{
         border-top: 1px solid white;
         padding: 5px 0 0 0;
     }
     
-    #check .buttons{
+    .check .buttons{
         margin: 10px 0 0 0;
         display: flex;
         justify-content: space-between;
