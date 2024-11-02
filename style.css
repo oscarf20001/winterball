@@ -373,8 +373,6 @@ html body form #checkData{
         left: 0;
         max-height: 100vh;
         height: 100vh;
-        background-color: rgba(8, 27, 75,0.1);
-        backdrop-filter: blur(8px); /* Blur-Effekt */
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
