@@ -227,8 +227,6 @@ html body form #checkData{
     width: 100%;
     max-height: 100vh;
     height: 100vh;
-    background-color: rgba(8, 27, 75,0.1);
-    backdrop-filter: blur(8px); /* Blur-Effekt */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -246,8 +244,9 @@ html body form #checkData{
     width: calc(100vw * 1.8);
     transform: translate(-20%, -20%);
     z-index: -1;
-    background-color: rgba(8, 27, 75,0.1);
-    backdrop-filter: blur(8px); /* Blur-Effekt */
+    background-color: rgba(8, 27, 75, 0.1);
+    -webkit-backdrop-filter: blur(8px); /* Safari und ältere Webkit-Browser */
+    backdrop-filter: blur(8px); /* Moderne Browser */
 }
 
 #check h1{
