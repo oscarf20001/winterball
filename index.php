@@ -72,7 +72,7 @@ if ($conn->connect_error) {
                 </div>
                 <div class="input-field age">
                     <input type="number" id="age" name="age" required>
-                    <label for="age">Dein Alter:<sup>*</sup></label>
+                    <label for="age">Dein Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                 </div>
                 <div class="input-field klasse">
                     <input type="text" id="klasse" name="klasse">
@@ -108,7 +108,7 @@ if ($conn->connect_error) {
                 </div>
                 <div class="input-field ticketAge">
                     <input type="text" id="" name="ticketAge" required>
-                    <label for="ticketAge">Alter:<sup>*</sup></label>
+                    <label for="ticketAge">Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                 </div>
             </div>
         </div>
@@ -239,7 +239,7 @@ if ($conn->connect_error) {
                             </div>
                             <div class="input-field ticketAge">
                                 <input type="text" id="age0${i}" name="ticketAge${i}" required>
-                                <label for="ticketAge${i}">Alter:<sup>*</sup></label>
+                                <label for="ticketAge${i}">Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                             </div>
                         </div>
                         `;
@@ -265,7 +265,7 @@ if ($conn->connect_error) {
                             </div>
                             <div class="input-field ticketAge">
                                 <input type="text" id="age01" name="ticketAge${count}" required>
-                                <label for="ticketAge${count}">Alter:<sup>*</sup></label>
+                                <label for="ticketAge${count}">Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                             </div>
                         </div>
                     `;

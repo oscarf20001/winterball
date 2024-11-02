@@ -127,6 +127,11 @@ input[type="button"]:hover {
     background-color: #c35252;
 }
 
+body form{
+    max-width: calc(100vw - 40px);
+    overflow: hidden;
+}
+
 body form .aboutYou .aboutYouInputs{
     display: grid;
     grid-template-areas: 
@@ -199,7 +204,7 @@ body form #ticketsContainer .ticket .ticketName{
     grid-area: name;
 }
 
-body form #ticketsContainer .ticket .ticketVorname{
+body form #ticketsContainer .ticket .ticketVorName{
     grid-area: vorname;
 }
 
@@ -209,6 +214,10 @@ body form #ticketsContainer .ticket .ticketEmail{
 
 body form #ticketsContainer .ticket .ticketAge{
     grid-area: age;
+}
+
+html body form #checkData{
+    margin: 0 0 50px 0;
 }
 
 #check{
@@ -225,6 +234,20 @@ body form #ticketsContainer .ticket .ticketAge{
     align-items: center;
     flex-direction: column;
     z-index: 1; /* Über Form legen */
+    scale: 0.9;
+}
+
+#check::after{
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: calc(100vh * 1.8);
+    width: calc(100vw * 1.8);
+    transform: translate(-20%, -20%);
+    z-index: -1;
+    background-color: rgba(8, 27, 75,0.1);
+    backdrop-filter: blur(8px); /* Blur-Effekt */
 }
 
 #check h1{
