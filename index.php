@@ -507,11 +507,10 @@ if ($conn->connect_error) {
                     $row = $result->fetch_assoc();
 
                     if($row['count'] == 0){
+                        //TICKET 01 DOESNT EXIST AT THIS POINT
                         $stmt = $conn->prepare($isNameInDB);
                         // GO ON WITH CHECK TICKET 2
                         $stmt->bind_param("ss", $nachNameTicket2, $vorNameTicket2);
-                        //echo "DEBUG: Vorname Ticket 2: " . $vorNameTicket2 . "<br>";
-                        //echo "DEBUG: Name Ticket 2: " . $nachNameTicket2 . "<br>";
                         // Abfrage ausführen
                         $stmt->execute();
                         $result = $stmt->get_result();
@@ -527,7 +526,8 @@ if ($conn->connect_error) {
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
                                     //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                    sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
+                                    //SENDMAIL AUSKOMMENTIERT AUFGRUND VON DOPPELTER EMAIL SENDUNG
+                                    //sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -540,7 +540,8 @@ if ($conn->connect_error) {
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket1, $vorNameTicket1, $emailTicket1, $ageTicket1, $money1, $customerId)){
                                     //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                    sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
+                                    //SENDMAIL AUSKOMMENTIERT AUFGRUND VON DOPPELTER EMAIL SENDUNG
+                                    //sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
