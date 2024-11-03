@@ -345,13 +345,13 @@ if ($conn->connect_error) {
 
                 // Preise abrufen
                 const price01 = await getTicketPrice(
-                    document.getElementById("prename01").value, 
-                    document.getElementById("name01").value
+                    document.getElementById("prename01").value.trim(), 
+                    document.getElementById("name01").value.trim()
                 );
 
                 const price02 = await getTicketPrice(
-                    document.getElementById("prename02").value, 
-                    document.getElementById("name02").value
+                    document.getElementById("prename02").value.trim(),
+                    document.getElementById("name02").value.trim()
                 );
 
                 const gesSumme = price01 + price02;
@@ -364,8 +364,8 @@ if ($conn->connect_error) {
                 document.getElementById("moneyTicket02").style.display = "none";
 
                 const price01 = await getTicketPrice(
-                    document.getElementById("prename01").value, 
-                    document.getElementById("name01").value
+                    document.getElementById("prename01").value.trim(), 
+                    document.getElementById("name01").value.trim()
                 );
 
                 document.getElementById("moneyTicket01").innerHTML = "Ticket 1: " + price01 + "€";
