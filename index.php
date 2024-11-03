@@ -194,6 +194,18 @@ if ($conn->connect_error) {
         </div>
     </div>
 
+    <div id="disclaimer">
+        <h1>Wichtige Info:</h1>
+        <div class="notePoints">
+            <p>- Der Käufer steht für seine gekauften Tickets in der Veranwortung</p>
+            <p>- Keine Anmeldung unter 16 Jahren</p>
+            <p>- Zahlung in Bar an Raphael Stark oder Oscar Streich persönlich (Zeitpunkt für Bezahlung wird noch bekannt gegeben)</p>
+            <br>
+            <p>- Durch klicken auf "OK" erklären Sie sich einverstanden mit oben genannten Punkten</p>
+        </div>
+        <input type="button" value="OK" onclick="document.getElementById('disclaimer').style.display = 'none';">
+    </div>
+
     <script>
         // Sicherstellen, dass das DOM vollständig geladen ist
         document.addEventListener("DOMContentLoaded", function() {
