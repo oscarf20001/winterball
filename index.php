@@ -437,13 +437,13 @@ if ($conn->connect_error) {
 
             //global $nachNameKäufer,$vorNameKäufer,$emailKäufer,$telNummerKäufer,$ageKäufer,$klasseKäufer,$countTicketsKäufer;
             //DATEN KÄUFER
-                $nachNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["nachname"]));
-                $vorNameKäufer = htmlspecialchars($conn->real_escape_string($_POST["vorname"]));
-                $emailKäufer = htmlspecialchars($conn->real_escape_string($_POST["email"]));
-                $telNummerKäufer = htmlspecialchars($conn->real_escape_string($_POST["telNumber"]));
-                $ageKäufer = htmlspecialchars($conn->real_escape_string($_POST["age"]));
-                $klasseKäufer = htmlspecialchars($conn->real_escape_string($_POST["klasse"]));
-                $countTicketsKäufer = htmlspecialchars($conn->real_escape_string($_POST["cntTickets"]));
+                $nachNameKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["nachname"])));
+                $vorNameKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["vorname"])));
+                $emailKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["email"])));
+                $telNummerKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["telNumber"])));
+                $ageKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["age"])));
+                $klasseKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["klasse"])));
+                $countTicketsKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["cntTickets"])));
                 
             //ANDERE VARIABLEN
                 $money = 0.00;
@@ -454,11 +454,11 @@ if ($conn->connect_error) {
                 
                 //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER MEHR ALS EIN TICKET KAUFT
                 //DATEN TICKET NR.1
-                $ageTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
-                $emailTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
+                $ageTicket1 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketAge1"])));
+                $emailTicket1 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketEmail1"])));
 
-                $nachNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
-                $vorNameTicket1 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+                $nachNameTicket1 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketName1"])));
+                $vorNameTicket1 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketVorName1"])));
 
                 //KOMPLETTEN NAMEN ERSTELLEN
                 $vollständigNameTicket1 = $vorNameTicket1 . " " . $nachNameTicket1;
@@ -473,11 +473,11 @@ if ($conn->connect_error) {
                 }
 
                 //DATEN TICKET NR.2
-                $ageTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketAge2"]));
-                $emailTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail2"]));
+                $ageTicket2 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketAge2"])));
+                $emailTicket2 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketEmail2"])));
 
-                $nachNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketName2"]));
-                $vorNameTicket2 = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName2"]));
+                $nachNameTicket2 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketName2"])));
+                $vorNameTicket2 = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketVorName2"])));
 
                 //KOMPLETTEN NAMEN ERSTELLEN
                 $vollständigNameTicket2 = $vorNameTicket2 . " " . $nachNameTicket2;
@@ -603,11 +603,11 @@ if ($conn->connect_error) {
 
                 //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER NUR EIN TICKET KAUFT
                 //DATEN TICKET
-                $ageTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketAge1"]));
-                $emailTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketEmail1"]));
+                $ageTicket = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketAge1"])));
+                $emailTicket = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketEmail1"])));
 
-                $nachNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketName1"]));
-                $vorNameTicket = htmlspecialchars($conn->real_escape_string($_POST["ticketVorName1"]));
+                $nachNameTicket = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketName1"])));
+                $vorNameTicket = htmlspecialchars($conn->real_escape_string(trim($_POST["ticketVorName1"])));
                 //KOMPLETTEN NAMEN ERSTELLEN
                 $vollständigNameTicket = $vorNameTicket . " " . $nachNameTicket;
 
