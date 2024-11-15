@@ -433,6 +433,11 @@ if ($conn->connect_error) {
         //DATEN AUS DEM FORMULAR ABRUFEN
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+            // LEERE FELDER PRÜFEN
+            if (empty($_POST['nachname']) || empty($_POST['vorname']) || empty($_POST['email']) || empty($_POST['telNumber']) || empty($_POST['age']) || empty($_POST['klasse']) || empty($_POST['cntTickets'])) {
+                die('Ein oder mehrere Felder sind leer!');
+            }
+
             //MAYBE MIT COOKIES ARBEITEN, UM DATEN DES KÄUFERS IM FORMULAR ZU SPEICHERN, DAMIT SIE NICHT VERLOREN GEHEN, WENN MAN ABSENDET UND ES EINEN ERROR GIBT? 
 
             //global $nachNameKäufer,$vorNameKäufer,$emailKäufer,$telNummerKäufer,$ageKäufer,$klasseKäufer,$countTicketsKäufer;
@@ -450,6 +455,9 @@ if ($conn->connect_error) {
                 $money1 = 0.00;
                 $money2 = 0.00;
 
+                $priceIntern = 12.00;
+                $priceExtern = 15.00;
+
             if($countTicketsKäufer == 2){
                 
                 //DIESER BLOCK WIRD AUSGEFÜHRT, WENN DER KÄUFER MEHR ALS EIN TICKET KAUFT
@@ -464,12 +472,12 @@ if ($conn->connect_error) {
                 $vollständigNameTicket1 = $vorNameTicket1 . " " . $nachNameTicket1;
                 $resultTicket1 = checkNameKombinationOfMCG($vollständigNameTicket1);
                 if($resultTicket1['found']){
-                    $money1 = $money1 + 12.00;
+                    $money1 = $money1 + $priceIntern;
                     $vollständigNameTicket1 = $resultTicket1['fullName'];
                     $nachNameTicket1 = $resultTicket1['lastName'];
                     $vorNameTicket1 = $resultTicket1['preName'];
                 }else{
-                    $money1 = $money1 + 15.00;
+                    $money1 = $money1 + $priceExtern;
                 }
 
                 //DATEN TICKET NR.2
@@ -483,12 +491,12 @@ if ($conn->connect_error) {
                 $vollständigNameTicket2 = $vorNameTicket2 . " " . $nachNameTicket2;
                 $resultTicket2 = checkNameKombinationOfMCG($vollständigNameTicket2);
                 if($resultTicket2['found']){
-                    $money2 = $money2 + 12.00;
+                    $money2 = $money2 + $priceIntern;
                     $vollständigNameTicket2 = $resultTicket2['fullName'];
                     $nachNameTicket2 = $resultTicket2['lastName'];
                     $vorNameTicket2 = $resultTicket2['preName'];
                 }else{
-                    $money2 = $money2 + 15.00;
+                    $money2 = $money2 + $priceExtern;
                 }
 
                 //PRÜFEN DER NAMEN AUF UNTERSCHIEDLICHKEIT
@@ -615,7 +623,7 @@ if ($conn->connect_error) {
                 //GEHÖRT ZUM MCG?
                 $resultTicket = checkNameKombinationOfMCG($vollständigNameTicket);
                 if($resultTicket['found']){
-                    $money = $money + 12.00;
+                    $money = $money + $priceIntern;
                     $vollständigNameTicket = $resultTicket['fullName'];
                     $nachNameTicket = $resultTicket['lastName'];
                     $vorNameTicket = $resultTicket['preName'];
@@ -661,7 +669,7 @@ if ($conn->connect_error) {
                     //GET KÄUFER ID 
                     //WRITE TICKET
                 }else{
-                    $money = $money + 15.00;
+                    $money = $money + $priceExtern;
                     //PRÜFEN, OB TICKET SCHON AUF DIESEN NAMEN AUSGESTELLT WURDE
                     if(checkIfNameOfTicketAlreadyExists($nachNameTicket,$vorNameTicket)){
                         //TICKET EXISTIERT SCHON
@@ -767,7 +775,6 @@ if ($conn->connect_error) {
 
             if($row['count'] == 0){
                 return false;
-                echo "Käufer existiert schon <br>";
             }else{
                 return true;
             }
