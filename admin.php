@@ -44,6 +44,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin-Panel Winterball des MCG's</title>
     <link rel="stylesheet" href="admin.css">
+    <script src="searchMails.js" defer></script>
 </head>
 <body>
     <div id="master-headline">
@@ -59,7 +60,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     <div class="formLeft">
                         <input type="hidden" name="form_type" value="form1">
                         <div class="input-field email">
-                            <input type="email" name="email" id="f-email" required>
+                            <input type="email" name="email" id="f-email" required onkeyup="searchMails()">
                             <label for="email">Email</label>
                         </div>
                     </div>
@@ -70,6 +71,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 </div>
             </div>
         </div>
+
+        <div id="suggestions"></div>
 
         <div id="resultTicket">
             <div id="käufer-data">
