@@ -47,6 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['query'])) {
         echo "<p>Keine Ergebnisse gefunden</p>";
     }
 
-    $mysqli->close();
+    $conn->close();
 }
 ?>
