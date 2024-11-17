@@ -132,7 +132,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                                                     <td id='k-age'>{$k_age}</td>
                                                     <td id='k-class'>{$k_class}</td>
                                                     <td id='k-cntTickets'>{$k_cntTickets}</td>
-                                                    <td id='k-sum'>{$k_open}€</td>
+                                                    <td id='k-sum'>{$k_open}.00€</td>
                                                     <td id='k-status' class='status{$k_status}'><div class=" . 'circle' . "></div></td>
                                                 </tr>";
 
@@ -223,7 +223,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <p>Hier den Betrag eingeben, welchen der Käufer beglichen hat. Die beglichenen Kosten werden in den Datensatz der vorher eingegebenen Email hinzugefügt. Zusätzlich die Methode auswählen. Standardmethode ist "Bar".</p>
             <form class="sendMoneyContainer" id="sendMoneyForm">
                 <div class="input-field euro">
-                    <input type="number" name="t-paid" id="t-paid" required>
+                    <input type="number" name="t-paid" id="t-paid" step="0.01" min="0" required>
                     <label for="euro">Bezahlt (in Euro):</label>
                 </div>
                 <div class="input-field selectOptions">
@@ -299,25 +299,41 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         });
 
         document.getElementById('checkout_btn').addEventListener('click', function () {
-            // VALUE AUS INPUT GÖNNEN
             const paidValue = document.getElementById('t-paid').value;
             const email = document.getElementById('k-mail').textContent;
             const method = document.getElementById('options').value;
-            console.log(method);
 
-            // AJAX SEND
             fetch('checkout.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'paid=' + encodeURIComponent(paidValue) + '&email=' + encodeURIComponent(email) + '&method=' + encodeURIComponent(method)
+                body: `paid=${encodeURIComponent(paidValue)}&email=${encodeURIComponent(email)}&method=${encodeURIComponent(method)}`
             })
-
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                alert('Antwort von PHP: \n\n' + data);
+                if (data) {
+                    // HTML-Felder aktualisieren
+                    document.getElementById('k-sum').textContent = `${data.open}€`; // Offener Betrag
+
+                    // Status aktualisieren
+                    const statusElement = document.getElementById('k-status');
+                    statusElement.textContent = ''; // Alten Status entfernen
+                    statusElement.className = `status${data.status}`;
+                    const statusCircle = document.createElement('div');
+                    statusCircle.className = 'circle';
+                    statusElement.appendChild(statusCircle);
+
+                    // Alert zur Bestätigung
+                    alert('Daten erfolgreich aktualisiert!');
+                } else {
+                    alert('Fehler beim Verarbeiten der Daten.');
+                }
             })
-            .catch(error => console.error('Fehler:', error));
+            .catch(error => {
+                console.error('Fehler:', error);
+                alert('Fehler bei der Kommunikation mit dem Server.');
+            });
         });
+
     </script>
 </body>
 </html>

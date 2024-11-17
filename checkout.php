@@ -3,78 +3,81 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-// Erstelle ein Dotenv-Objekt und lade die .env-Datei
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// Greife auf die Umgebungsvariablen zu
 $dbHost = $_ENV['DB_HOST'];
 $dbDatabase = $_ENV['DB_NAME'];
 $dbUsername = $_ENV['DB_USERNAME'];
 $dbPassword = $_ENV['DB_PASSWORD'];
 
-// Erstellen einer MySQL-Verbindung mit den Umgebungsvariablen
 $conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbDatabase);
-
-// Verbindung auf UTF-8 setzen
 $conn->set_charset("utf8");
 
-// Überprüfen der Verbindung
 if ($conn->connect_error) {
-    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
-}else{
-    //echo "<script>console.log('Verbindung zur Datenbank erfolgreich hergestellt!')</script>";
+    http_response_code(500);
+    echo json_encode(['error' => 'Database connection failed']);
+    exit;
 }
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $paid = $_POST['paid'] ?? 0;
-    echo "Der berechnte Betrag ist: " . number_format($paid,2). " Euro\n";
-
     $methodStr = $_POST['method'];
+    $email = $_POST['email'];
 
-    //KÄUFER ID GÖNNEN
-    $sqlGetKaeuferId = "SELECT ID FROM käufer WHERE email = '".$_POST["email"]."';";
+    // Get buyer ID
+    $sqlGetKaeuferId = "SELECT ID FROM käufer WHERE email = ?";
     $stmt = $conn->prepare($sqlGetKaeuferId);
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    $k_id = $result->fetch_assoc();
-    $k_id = $k_id['ID'];
-    $stmt->close();
-    date_default_timezone_set('UTC');
-    $timestamp = date("Y/m/d - H:i:s");
-    echo "Käufer-ID: " . $k_id . "\n";
-    echo "Methode: " . $methodStr . "\n";
-    echo "Zeit: " . $timestamp;
-
-    //GELD BUCHEN
-    $sqlBuchen = "UPDATE `käufer` SET `paid` = paid + $paid, `method` = '$methodStr', `date_paid` = '$timestamp' WHERE `käufer`.`ID` = $k_id;";
-    $stmt = $conn->prepare($sqlBuchen);
-    $stmt->execute();
+    $k_id = $result->fetch_assoc()['ID'] ?? null;
     $stmt->close();
 
-    //DIFFERENZ CHECKEN
-    $sqlDif = "SELECT `open` FROM `käufer` WHERE ID = $k_id";
-    $stmt = $conn->prepare($sqlDif);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $diff = $result->fetch_assoc();
-    $diff = $diff['open'];
-    $stmt->close();
-
-    if($diff <= 0){
-        //STATUS SETZEN
-        $sqlStatus = "UPDATE `käufer` SET `status` = 1 WHERE ID = $k_id";
-        $stmt = $conn->prepare($sqlStatus);
-        $stmt->execute();
-        $stmt->close();
-    }else{
-        $sqlStatus = "UPDATE `käufer` SET `status` = 0 WHERE ID = $k_id";
-        $stmt = $conn->prepare($sqlStatus);
-        $stmt->execute();
-        $stmt->close();
+    if (!$k_id) {
+        echo json_encode(['error' => 'Buyer not found']);
+        exit;
     }
 
-}else{
-    echo "Ungültig!";
+    $timestamp = date("Y/m/d - H:i:s");
+    $sqlBuchen = "UPDATE `käufer` SET `paid` = `paid` + ?, `method` = ?, `date_paid` = ? WHERE `ID` = ?";
+    $stmt = $conn->prepare($sqlBuchen);
+    $stmt->bind_param('dssi', $paid, $methodStr, $timestamp, $k_id);
+    $stmt->execute();
+    $stmt->close();
+
+    $sqlDif = "SELECT `open` FROM `käufer` WHERE ID = ?";
+    $stmt = $conn->prepare($sqlDif);
+    $stmt->bind_param('i', $k_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $diff = $result->fetch_assoc()['open'];
+    $stmt->close();
+
+    $status = $diff <= 0 ? 1 : 0;
+    $sqlStatus = "UPDATE `käufer` SET `status` = ? WHERE ID = ?";
+    $stmt = $conn->prepare($sqlStatus);
+    $stmt->bind_param('ii', $status, $k_id);
+    $stmt->execute();
+    $stmt->close();
+
+    $sqlFinal = "SELECT `paid`, `open`, `status`, `method` FROM `käufer` WHERE ID = ?";
+    $stmt = $conn->prepare($sqlFinal);
+    $stmt->bind_param('i', $k_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $finalData = $result->fetch_assoc();
+    $stmt->close();
+
+    header('Content-Type: application/json');
+    echo json_encode([
+        'paid' => number_format($finalData['paid'], 2),
+        'open' => number_format($finalData['open'], 2),
+        'status' => $finalData['status'],
+        'method' => $finalData['method']
+    ]);
+} else {
+    http_response_code(405);
+    echo json_encode(['error' => 'Invalid request method']);
 }
-?>
+exit;
