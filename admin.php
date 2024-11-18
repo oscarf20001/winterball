@@ -132,7 +132,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                                                     <td id='k-age'>{$k_age}</td>
                                                     <td id='k-class'>{$k_class}</td>
                                                     <td id='k-cntTickets'>{$k_cntTickets}</td>
-                                                    <td id='k-sum'>{$k_open}.00€</td>
+                                                    <td id='k-sum'>{$k_open}.€</td>
                                                     <td id='k-status' class='status{$k_status}'><div class=" . 'circle' . "></div></td>
                                                 </tr>";
 
