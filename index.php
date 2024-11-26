@@ -1,11 +1,23 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
-
 use Dotenv\Dotenv;
+// Lade den Composer-Autoloader
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Erstelle ein Dotenv-Objekt und lade die .env-Datei
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+// SMTP-Config
+$mailHost = $_ENV['MAIL_HOST'];
+$mailUsername = $_ENV['MAIL_USERNAME'];
+$mailPassword = $_ENV['MAIL_PASSWORD'];   
+$mailPort = $_ENV['MAIL_PORT'];                   
+$mailEncryption = PHPMailer::ENCRYPTION_STARTTLS;
+
 
 // Greife auf die Umgebungsvariablen zu
 $dbHost = $_ENV['DB_HOST'];
@@ -34,7 +46,7 @@ if ($conn->connect_error) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anmeldung Winterball 2024 MCG</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -564,7 +576,7 @@ if ($conn->connect_error) {
                                 //TICKET SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
                                     //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                    sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
+                                    sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -577,7 +589,7 @@ if ($conn->connect_error) {
                                 //TICKET AUF CUSTOMERID SCHREIBEN
                                 if(writeTicket($nachNameTicket2, $vorNameTicket2, $emailTicket2, $ageTicket2, $money2, $customerId)){
                                     //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                    sendMail($emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
+                                    sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket1, $vorNameTicket1, true, $emailTicket2, $vorNameTicket2);
                                 }else{
                                     echo "Ticket wurde nicht erstellt";
                                 }
@@ -645,7 +657,7 @@ if ($conn->connect_error) {
                             //TICKET SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
                                 //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                sendMail($emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
+                                sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -658,7 +670,7 @@ if ($conn->connect_error) {
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
                                 //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                sendMail($emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
+                                sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -688,7 +700,7 @@ if ($conn->connect_error) {
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
                                 //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                sendMail($emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
+                                sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -701,7 +713,7 @@ if ($conn->connect_error) {
                             //TICKET AUF CUSTOMERID SCHREIBEN
                             if(writeTicket($nachNameTicket, $vorNameTicket, $emailTicket, $ageTicket, $money, $customerId)){
                                 //EMAIL VERSENDEN: AN KÄUFER UND AN DIE, FÜR DIE TICKETS BESTELLT WURDEN
-                                sendMail($emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
+                                sendMail($conn, $emailKäufer, $vorNameKäufer, $emailTicket, $vorNameTicket, false, "", "");
                             }else{
                                 echo "Ticket wurde nicht erstellt";
                             }
@@ -878,55 +890,221 @@ if ($conn->connect_error) {
             file_put_contents($logfile, date("Y-m-d H:i:s") . " - " . $message . PHP_EOL, FILE_APPEND);
         }
         
-        function sendMail($emailKäufer, $nameKäufer, $ticket1, $nameTicket1, $optionalTicket2, $ticket2 = null, $nameTicket2 = null) {
-            $betreff = "Buchungsbestätigung - Winterball des MCGs 2024";
-        
-            // E-Mail-Header
-            $header = "From: noreply@curiegymnasium.de\r\n";
-            $header .= "Reply-To: streiosc@curiegym.de\r\n";
-        
-            // Nachrichtentext der Buchungsbestätigung an den Käufer
-            $nachricht = "Hallo ".trim($nameKäufer).",\n\n";
-            $nachricht .= "Vielen Dank für deine Buchung! Wir bestätigen hiermit, dass deine Anfrage eingegangen ist.\n";
-            $nachricht .= "Wir melden uns bei dir, falls weitere Informationen benötigt werden.\n\n";
-            $nachricht .= "Zusätzlich haben wir die Buchungsbestätigung an die angegebene(n) E-Mail-Adresse(n) des Tickets/der Tickets versendet.\n\n";
-            $nachricht .= "Mit freundlichen Grüßen,\nGordon :)";
-        
-            // E-Mail an den Käufer senden
-            if (mail($emailKäufer, $betreff, $nachricht, $header)) {
-                logMessage("Email an Käufer ($emailKäufer) versendet");
-            } else {
-                logMessage("Fehler: Emailversand an Käufer ($emailKäufer) fehlgeschlagen");
-            }
-        
-            // Nachricht für Ticket 1
-            $nachrichtTicket1 = "Hallo ".trim($nameTicket1).",\n\n";
-            $nachrichtTicket1 .= "Wir haben festgestellt, dass auf diese Email-Adresse ($ticket1) ein Ticket für den Winterball des MCGs 2024 gebucht wurde.\n\n";
-            $nachrichtTicket1 .= "Falls das korrekt ist, brauchst du nichts weiter zu unternehmen.\n\n";
-            $nachrichtTicket1 .= "Falls das NICHT korrekt ist, antworte bitte auf diese Email und teile uns das Problem mit.\n\n";
-            $nachrichtTicket1 .= "Mit freundlichen Grüßen,\nGordon :)";
-        
-            // E-Mail an Ticket 1 senden
-            if (mail($ticket1, $betreff, $nachrichtTicket1, $header)) {
-                logMessage("Email an Ticket 1 ($ticket1) versendet");
-            } else {
-                logMessage("Fehler: Emailversand an Ticket 1 ($ticket1) fehlgeschlagen");
-            }
-        
-            // Falls optionalTicket2 angegeben ist, Nachricht für Ticket 2 erstellen und senden
-            if ($optionalTicket2 && $ticket2 !== null && $nameTicket2 !== null) {
-                $nachrichtTicket2 = "Hallo ".trim($nameTicket2).",\n\n";
-                $nachrichtTicket2 .= "Wir haben festgestellt, dass auf diese Email-Adresse ($ticket2) ein Ticket für den Winterball des MCGs 2024 gebucht wurde.\n\n";
-                $nachrichtTicket2 .= "Falls das korrekt ist, brauchst du nichts weiter zu unternehmen.\n\n";
-                $nachrichtTicket2 .= "Falls das NICHT korrekt ist, antworte bitte auf diese Email und teile uns das Problem mit.\n\n";
-                $nachrichtTicket2 .= "Mit freundlichen Grüßen,\nGordon :)";
-        
-                // E-Mail an Ticket 2 senden
-                if (mail($ticket2, $betreff, $nachrichtTicket2, $header)) {
-                    logMessage("Email an Ticket 2 ($ticket2) versendet");
+        function sendMail($conn, $emailKäufer, $nameKäufer, $ticket1, $nameTicket1, $optionalTicket2, $ticket2 = null, $nameTicket2 = null) {
+            $KäuferID = "SELECT ID FROM käufer WHERE email = ?";
+            $stmt = $conn->prepare($KäuferID);
+            $stmt->bind_param("s", $emailKäufer);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $id = $row['ID'];
+
+            $iban = "DE 1210 0900 0087 1841 2006";
+
+            //Sum for this Käufer
+            $sqlkäuferSum = "SELECT open FROM käufer WHERE ID = $id";
+            $stmt = $conn->prepare($sqlkäuferSum);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $käuferSum = $row['open'];
+            $stmt->close();
+
+            $mail = new PHPMailer(true);
+
+            try {
+                // Erstelle eine PHPMailer-Instanz
+
+                //PREPARE NACHRICHT
+                $nachricht = "
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <title>Weihnachtsball</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                line-height: 1.6;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                            }
+                            th, td {
+                                padding: 8px;
+                                text-align: left;
+                                border: 1px solid #ddd;
+                            }
+                            th {
+                                background-color: #f2f2f2;
+                            }
+                            p {
+                                margin: 16px 0;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <p>Hey " . htmlspecialchars($nameKäufer, ENT_QUOTES, 'UTF-8') . ",</p>
+                        <p><em>*Es folgt ein lyrisches Meisterwerk*</em></p>
+                        <p>
+                            Der Weihnachtsball steht bald vor der Tür,<br>
+                            Mit Rudolf und Santa, hier und mit Gespür!<br>
+                            Die Tickets jetzt zum Kauf bereit,<br>
+                            Für eine fancytastische Nacht voll Heiterkeit!
+                        </p>
+                        <p>
+                            Es wird episch, das ist ganz klar,<br>
+                            Der Weihnachtsball – einfach wunderbar!<br>
+                            Legendär wird unser Fest,<br>
+                            Komm und feier mit uns, sei unser Gast!
+                        </p>
+                        <p>
+                            Du hast es gehört... die Weihnachtszeit und deine Wünsche für den Weihnachtsmann rücken näher. Wie gut, dass wir dir einen Wunsch schon jetzt erfüllen können.<br>
+                            DU, zusammen mit deinen Freunden, darfst auf dem Weihnachtsball dabei sein!<br>
+                            Mit diesem lyrischen Meisterwerk wollen wir, zusammen mit euch, die Weihnachtszeit einleuten. Damit alles glatt geht, kommt diesen Freitag (22.11) und nächste Woche einfach in jeder zweiten Pause zu uns vor die Bibliothek und besorgt euch eure Tickets!<br>
+                        </p>
+                        <p>Hier nochmal eine kleine Übersicht deiner Reservierung:</p>
+                        <table>
+                            <thead style='border-left:2px solid black;'>
+                                <tr>
+                                    <th>Deine, noch zu begleichende, Summe:</th>
+                                    <th>" . number_format($käuferSum, 2, ',', '.') . "€</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <p>Bezüglich der Tickets:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vorname</th>
+                                    <th>Nachname</th>
+                                    <th>Summe</th>
+                                </tr>
+                            </thead>
+                            <tbody>";
+
+                            //Tickets for this Käufer
+                            $KäuferAllTickets = "SELECT email,vorname,nachname,sum FROM tickets WHERE käufer_ID = $id";
+                            $stmt = $conn->prepare($KäuferAllTickets);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            // Füge Zeilen für jedes Ticket hinzu
+                            while ($row = $result->fetch_assoc()) {
+                                $vorname = htmlspecialchars($row['vorname'], ENT_QUOTES, 'UTF-8');
+                                $nachname = htmlspecialchars($row['nachname'], ENT_QUOTES, 'UTF-8');
+                                $sum = number_format((float)$row['sum'], 2, ',', '.');
+                    
+                                $nachricht .= "
+                                <tr>
+                                    <td>$vorname</td>
+                                    <td>$nachname</td>
+                                    <td>" . $sum . "€</td>
+                                </tr>";
+                            }
+                    
+                            $nachricht .= "
+                            </tbody>
+                        </table>
+                        <p>
+                            Wir bieten auch die Möglichkeit einer Überweisung an. Überweise dazu die oben genannte Summe an dieses Konto:
+                        </p>
+                        <p>
+                            <strong>IBAN:</strong> ".$iban."<br>
+                            <strong>Name:</strong> Felix Wernecke<br>
+                            <strong>Verwendungszweck:</strong> \"". $emailKäufer ." Winterball\"
+                        </p>
+                        <p>Wir wünschen eine frohe Vorweihnachtszeit und freuen uns auf dich!</p>
+                        <p>Mit freundlichen Grüßen,<br>Gordon</p>
+                    </body>
+                    </html>
+                ";
+
+                // SMTP-Config
+                $mailHost = $_ENV['MAIL_HOST'];
+                $mailUsername = $_ENV['MAIL_USERNAME'];
+                $mailPassword = $_ENV['MAIL_PASSWORD'];   
+                $mailPort = $_ENV['MAIL_PORT'];                   
+                $mailEncryption = PHPMailer::ENCRYPTION_STARTTLS;
+            
+                // Servereinstellungen
+                $mail->isSMTP();                      // SMTP-Modus aktivieren
+                $mail->Host       = $mailHost;        // SMTP-Server
+                $mail->SMTPAuth   = true;             // SMTP-Authentifizierung aktivieren
+                $mail->Username   = $mailUsername;    // SMTP-Benutzername (deine Gmail-Adresse)
+                $mail->Password   = $mailPassword;    // SMTP-Passwort (App-Passwort)
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Verschlüsselung
+                $mail->Port       = $mailPort;        // Port (587 für TLS)
+                $mail->CharSet = 'UTF-8';
+                $mail->Encoding = 'base64';
+            
+                // Absender und Empfänger
+                $mail->setFrom($mailUsername, 'Marie-Curie Gymnasium'); // Absenderadresse und Name
+                $mail->addReplyTo('streiosc@curiegym.de', 'Oscar'); // Reply-To-Adresse
+                $mail->addAddress($emailKäufer, $nameKäufer); // Empfängeradresse
+            
+                // Nachricht konfigurieren
+                $mail->isHTML(true); // HTML-Format aktivieren
+                $mail->Subject = 'Buchungsbestätigung Winterball'; // Betreff
+                $mail->Body    = $nachricht; // HTML-Inhalt
+                $mail->AltBody = 'Dies ist der Klartext-Inhalt der E-Mail.'; // Klartext-Inhalt (falls kein HTML unterstützt wird)
+            
+                // E-Mail senden
+                if ($mail->send()) {
+                    logMessage("Email an Käufer ($emailKäufer) via new SMTP versendet");
                 } else {
-                    logMessage("Fehler: Emailversand an Ticket 2 ($ticket2) fehlgeschlagen");
+                    $errorInfo = $mail->ErrorInfo;
+                    logMessage("Fehler: E-Mail konnte nicht gesendet werden. Fehlerinfo: $errorInfo");
+                    echo 'E-Mail konnte nicht via new SMTP gesendet werden. Fehler: ' . $errorInfo;
                 }
+            } catch (Exception $e) {
+                logMessage("Fehler: Emailversand an Käufer ($emailKäufer) fehlgeschlagen: {$mail->ErrorInfo}");
+                echo "Fehler beim Senden der E-Mail: {$mail->ErrorInfo}";
+            }
+
+            $mail->clearAddresses();
+            $mail->clearAttachments();
+        
+            $tickets = [
+                ['email' => $ticket1, 'name' => $nameTicket1]
+            ];
+
+            if($optionalTicket2 && $ticket2 !== null && $nameTicket2 !== null){
+                $tickets[] = ['email' => $ticket2, 'name' => $nameTicket2];
+            }
+
+            // Betreff und Header für die E-Mails
+            $betreff = "Dein Ticket für den Winterball des MCGs 2024";
+
+            // Über jedes Ticket iterieren
+            foreach ($tickets as $ticket) {
+                $email = trim($ticket['email']);
+                $name = trim($ticket['name']);
+        
+                // Nachricht erstellen
+                $nachricht = "Hallo $name,\n\n";
+                $nachricht .= "Wir haben festgestellt, dass auf diese Email-Adresse ($email) ein Ticket für den Winterball des MCGs 2024 gebucht wurde.\n\n";
+                $nachricht .= "Falls das korrekt ist, brauchst du nichts weiter zu unternehmen.\n\n";
+                $nachricht .= "Falls das NICHT korrekt ist, antworte bitte auf diese Email und teile uns das Problem mit.\n\n";
+                $nachricht .= "Mit freundlichen Grüßen,\nGordon :)";
+        
+                // Empfänger und Nachricht setzen
+                $mail->addAddress($email, $name);
+                $mail->Subject = $betreff;
+                $mail->Body = $nachricht;
+        
+                // E-Mail senden
+                try {
+                    $mail->send();
+                    logMessage("E-Mail an Ticket $name ($email) erfolgreich versendet.");
+                } catch (Exception $e) {
+                    logMessage("Fehler: E-Mail-Versand an $name ($email) fehlgeschlagen: {$mail->ErrorInfo}");
+                }
+        
+                // Adressen und Anhänge löschen
+                $mail->clearAddresses();
+                $mail->clearAttachments();
             }
         }
         

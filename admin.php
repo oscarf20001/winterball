@@ -43,8 +43,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin-Panel Winterball des MCG's</title>
-    <link rel="stylesheet" href="admin.css">
-    <script src="searchMails.js" defer></script>
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="javascript/searchMails.js" defer></script>
 </head>
 <body>
     <div id="master-headline">
