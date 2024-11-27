@@ -125,9 +125,9 @@ try {
             <p>Deine Kosten in Höhe von<br><br>
             ". htmlspecialchars($sum) . "€<br><br>
             wurden voll und ganz beglichen. Wie episch!</p>
-            <p>Einige letzte Infos für dich: <br>- Der Einlass ist 19 - 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebühr von ".number_format($addedValue, 2, ',', '.')."€ an. <br>- Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
+            <p>Einige letzte Infos für dich: <br>- Der Einlass ist von 19 bis 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebühr von ".number_format($addedValue, 2, ',', '.')."€ an. <br>- Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
             
-            <p>Wir danken, freuen uns zusammen mit dir auf den 13.12 und wünschen dir eine frohe Vorweihnachtszeit!
+            <p>Wir danken, freuen uns zusammen mit dir auf den 13.12. und wünschen dir eine frohe Vorweihnachtszeit!<br><br>
             Mit freundlichen Grüßen,<br>Gordon!</p>
         </body>
         </html>

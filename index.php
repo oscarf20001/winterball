@@ -969,7 +969,7 @@ if ($conn->connect_error) {
                         <p>
                             Du hast es gehört... die Weihnachtszeit und deine Wünsche für den Weihnachtsmann rücken näher. Wie gut, dass wir dir einen Wunsch schon jetzt erfüllen können.<br>
                             DU, zusammen mit deinen Freunden, darfst auf dem Weihnachtsball dabei sein!<br>
-                            Mit diesem lyrischen Meisterwerk wollen wir, zusammen mit euch, die Weihnachtszeit einleuten. Damit alles glatt geht, kommt diesen Freitag (22.11) und nächste Woche einfach in jeder zweiten Pause zu uns vor die Bibliothek und besorgt euch eure Tickets!<br>
+                            Mit diesem lyrischen Meisterwerk wollen wir, zusammen mit euch, die Weihnachtszeit einleuten. Damit alles glatt geht, kommt gern jeden Dienstag und Donnerstag in jeder zweiten Pause zu uns vor die Bibliothek und besorgt euch eure Tickets!<br>
                         </p>
                         <p>Hier nochmal eine kleine Übersicht deiner Reservierung:</p>
                         <table>
