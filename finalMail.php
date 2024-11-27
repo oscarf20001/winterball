@@ -34,15 +34,23 @@ if ($conn->connect_error) {
 }
 
 // Eingabedaten abrufen und validieren
-$input = json_decode(file_get_contents('php://input'), true);
-$email = filter_var($input['email'] ?? null, FILTER_VALIDATE_EMAIL);
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
 
-if (!$email) {
+// JSON-Fehler prüfen
+if (json_last_error() !== JSON_ERROR_NONE) {
+    sendJsonResponse(['error' => 'Fehler beim Lesen von JSON-Daten: ' . json_last_error_msg()]);
+    exit;
+}
+
+// E-Mail-Adresse validieren
+$email = $data['email'] ?? null;
+if (empty($email)) {
     sendJsonResponse([
-        'error' => 'Ungültige E-Mail-Adresse',
+        'error' => 'Ungültige oder fehlende E-Mail-Adresse',
         'debug' => [
-            'input' => $input,
-            'raw_post' => file_get_contents('php://input')
+            'input' => $data,
+            'raw_post' => $input,
         ]
     ]);
     exit;
@@ -100,7 +108,7 @@ try {
             <p>Deine Kosten in Höhe von</p><br>
             <p> ". htmlspecialchars($sum) . "€</p><br>
             <p>wurde voll und ganz beglichen. Wie episch!</p>
-            <p>Einige letze Infos für dich: Der Einlass ist 19 - 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebür von ".$addedValue." an. Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
+            <p>Einige letzte Infos für dich: Der Einlass ist 19 - 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebühr von ".$addedValue." an. Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
             <p>Beim Eintritt zeige bitte folgende Codes dem Einlass vor:</p>
             <table>
                 <thead>
@@ -113,8 +121,8 @@ try {
                 <tbody>";
 
 
-                //Tickets for this Käufer
-                $KäuferAllTickets = "SELECT email,vorname,nachname,sum FROM tickets WHERE käufer_ID = $id";
+                // Tickets für diesen Käufer
+                $KäuferAllTickets = "SELECT email, vorname, nachname, sum FROM tickets WHERE käufer_ID = $k_id";
                 $stmt = $conn->prepare($KäuferAllTickets);
                 $stmt->execute();
                 $result = $stmt->get_result();
