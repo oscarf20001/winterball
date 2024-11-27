@@ -31,7 +31,9 @@ if ($conn->connect_error) {
 }
 
 // Eingabedaten abrufen und validieren
-$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$input = json_decode(file_get_contents('php://input'), true);
+$email = filter_var($input['email'] ?? null, FILTER_VALIDATE_EMAIL);
+
 if (!$email) {
     sendJsonResponse(['error' => 'Ungültige E-Mail-Adresse', 'debug' => $_POST['email'] ?? 'Keine E-Mail übermittelt']);
     exit;

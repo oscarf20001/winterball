@@ -329,10 +329,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     //WITH ONCLICK ON THIS BUTTON A FRUTHER FILE HAS TO BE EXECUTED. 
                     //CHECK IF, WHEN CUSTOMER HAS PAID, THE OPEN FIELD EQUALS 0. IF SO, SEND A MAIL, THAT ALL COSTS ARE 0
                     if (data.open == 0) {
+                        console.log(email)
+                        console.log(`email=${encodeURIComponent(email)}`);
                         fetch('finalMail.php', {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                            body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: email })
                         })
                         .then(response => {
                             if (!response.ok) {
