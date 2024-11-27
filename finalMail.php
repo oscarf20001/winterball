@@ -1,4 +1,7 @@
 <?php
+// Debugging: Rohdaten aus POST-Body loggen
+error_log("Rohdaten aus php://input: " . file_get_contents('php://input'));
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -35,7 +38,13 @@ $input = json_decode(file_get_contents('php://input'), true);
 $email = filter_var($input['email'] ?? null, FILTER_VALIDATE_EMAIL);
 
 if (!$email) {
-    sendJsonResponse(['error' => 'Ungültige E-Mail-Adresse', 'debug' => $_POST['email'] ?? 'Keine E-Mail übermittelt']);
+    sendJsonResponse([
+        'error' => 'Ungültige E-Mail-Adresse',
+        'debug' => [
+            'input' => $input,
+            'raw_post' => file_get_contents('php://input')
+        ]
+    ]);
     exit;
 }
 

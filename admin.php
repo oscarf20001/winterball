@@ -1,5 +1,15 @@
 <!-- ADMIN PANEL -->
 <?php
+// Debugging: POST-Daten überprüfen
+error_log("POST data: " . print_r($_POST, true));
+
+// Prüfen, ob die E-Mail vorhanden ist
+if (isset($_POST['email'])) {
+    error_log("E-Mail empfangen: " . $_POST['email']);
+} else {
+    error_log("Keine E-Mail übermittelt.");
+}
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
