@@ -969,7 +969,7 @@ if ($conn->connect_error) {
                         <p>
                             Du hast es gehört... die Weihnachtszeit und deine Wünsche für den Weihnachtsmann rücken näher. Wie gut, dass wir dir einen Wunsch schon jetzt erfüllen können.<br>
                             DU, zusammen mit deinen Freunden, darfst auf dem Weihnachtsball dabei sein!<br>
-                            Mit diesem lyrischen Meisterwerk wollen wir, zusammen mit euch, die Weihnachtszeit einleuten. Damit alles glatt geht, kommt gern jeden Dienstag und Donnerstag in jeder zweiten Pause zu uns vor die Bibliothek und besorgt euch eure Tickets!<br>
+                            Wir wollen mit dir zusammen die Weihnachtszeit einläuten. Damit alles glatt geht, komm gern jeden Dienstag und Donnerstag in jeder zweiten Pause zu uns vor die Bibliothek und besorgt dir dein Ticket!<br>
                         </p>
                         <p>Hier nochmal eine kleine Übersicht deiner Reservierung:</p>
                         <table>
@@ -1020,7 +1020,7 @@ if ($conn->connect_error) {
                         <p>
                             <strong>IBAN:</strong> ".$iban."<br>
                             <strong>Name:</strong> Felix Wernecke<br>
-                            <strong>Verwendungszweck:</strong> \"". $emailKäufer ." Winterball\"
+                            <strong>Verwendungszweck:</strong> \"". str_replace("@", "at", $emailKäufer)." Winterball\"
                         </p>
                         <p>Wir wünschen eine frohe Vorweihnachtszeit und freuen uns auf dich!</p>
                         <p>Mit freundlichen Grüßen,<br>Gordon</p>
