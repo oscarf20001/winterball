@@ -33,7 +33,7 @@ if ($conn->connect_error) {
 // Eingabedaten abrufen und validieren
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 if (!$email) {
-    sendJsonResponse(['error' => 'Ungültige E-Mail-Adresse']);
+    sendJsonResponse(['error' => 'Ungültige E-Mail-Adresse', 'debug' => $_POST['email'] ?? 'Keine E-Mail übermittelt']);
     exit;
 }
 

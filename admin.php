@@ -1,8 +1,5 @@
 <!-- ADMIN PANEL -->
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -332,7 +329,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     //WITH ONCLICK ON THIS BUTTON A FRUTHER FILE HAS TO BE EXECUTED. 
                     //CHECK IF, WHEN CUSTOMER HAS PAID, THE OPEN FIELD EQUALS 0. IF SO, SEND A MAIL, THAT ALL COSTS ARE 0
                     if (data.open == 0) {
-                        console.log(email + " " + name);
                         fetch('finalMail.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -343,6 +339,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                                 throw new Error('Fehler bei finalMail.php');
                             }
                             return response.json();
+                        })
+                        .then(data => {
+                            if (data) {
+                                const sum = `${data.open}€`;
+                                // Weitere Verarbeitung, falls nötig
+                            }
                         })
                         .catch(error => {
                             console.error('Fehler bei der finalMail-Anfrage:', error);
