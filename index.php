@@ -863,7 +863,14 @@ if ($conn->connect_error) {
             $stmt = $conn->prepare($sqlWriteNewTicket);
             $stmt->bind_param("sssiii",$nachName_DB, $vorName_DB, $email_DB, $age_DB, $sum_DB, $käuferId_DB);
             if($stmt->execute()){
-                return true;
+                $sqlUpdateKäuferOpen = "UPDATE käufer SET open = sum - paid WHERE ID = ?";
+                $stmt = $conn->prepare($sqlUpdateKäuferOpen);
+                $stmt->bind_param("i",$käuferId_DB);
+                if($stmt->execute()){
+                    return true;
+                }else{
+                    die("Fehler beim Ausführen der SQL-Abfrage: " . $stmt->error);    
+                }
             }else{
                 die("Fehler beim Ausführen der SQL-Abfrage: " . $stmt->error);
             }
