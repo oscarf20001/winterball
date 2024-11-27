@@ -1108,9 +1108,6 @@ if ($conn->connect_error) {
             }
         }
         
-        //**TODO**: TABELLE BRAUCHT NOCH EINE SPALTE FÜR DEN STATUS EINER BEZAHLUNG EINES TICKETS
-        //**TODO**: ADMIN-PANEL
-        
     ?>
 </body>
 </html>

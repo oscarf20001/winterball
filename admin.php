@@ -302,6 +302,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             const paidValue = document.getElementById('t-paid').value;
             const email = document.getElementById('k-mail').textContent;
             const method = document.getElementById('options').value;
+            const name = document.getElementById('k-prename').textContent;
 
             fetch('checkout.php', {
                 method: 'POST',
@@ -324,6 +325,21 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
                     // Alert zur Bestätigung
                     alert('Daten erfolgreich aktualisiert!');
+
+                    //WITH ONCLICK ON THIS BUTTON A FRUTHER FILE HAS TO BE EXECUTED. 
+                    //CHECK IF, WHEN CUSTOMER HAS PAID, THE OPEN FIELD EQUALS 0. IF SO, SEND A MAIL, THAT ALL COSTS ARE 0
+                    if (data.open == 0) {
+                        fetch('',{
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data){
+                                const sum = `${data.open}€`;
+                            }
+                        })
                 } else {
                     alert('Fehler beim Verarbeiten der Daten.');
                 }
@@ -332,6 +348,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 console.error('Fehler:', error);
                 alert('Fehler bei der Kommunikation mit dem Server.');
             });
+
+            //WITH ONCLICK ON THIS BUTTON A FRUTHER FILE HAS TO BE EXECUTED. 
+            //CHECK IF, WHEN CUSTOMER HAS PAID, THE OPEN FIELD EQUALS 0. IF SO, SEND A MAIL, THAT ALL COSTS ARE 0
+
         });
 
     </script>
