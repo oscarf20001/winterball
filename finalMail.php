@@ -99,54 +99,36 @@ try {
             <meta charset='UTF-8'>
             <title>Weihnachtsball</title>
             <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; }
-                p { margin: 16px 0; }
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    padding: 8px;
+                    text-align: left;
+                    border: 1px solid #ddd;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                p {
+                    margin: 16px 0;
+                }
             </style>
         </head>
         <body>
             <p>Hey " . htmlspecialchars($vorname, ENT_QUOTES, 'UTF-8') . ",</p>
-            <p>Deine Kosten in Höhe von</p><br>
-            <p> ". htmlspecialchars($sum) . "€</p><br>
-            <p>wurde voll und ganz beglichen. Wie episch!</p>
-            <p>Einige letzte Infos für dich: Der Einlass ist 19 - 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebühr von ".$addedValue." an. Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
-            <p>Beim Eintritt zeige bitte folgende Codes dem Einlass vor:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Vorname</th>
-                        <th>Nachname</th>
-                        <th>Summe</th>
-                    </tr>
-                </thead>
-                <tbody>";
-
-
-                // Tickets für diesen Käufer
-                $KäuferAllTickets = "SELECT email, vorname, nachname, sum FROM tickets WHERE käufer_ID = $k_id";
-                $stmt = $conn->prepare($KäuferAllTickets);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                // Füge Zeilen für jedes Ticket hinzu
-                while ($row = $result->fetch_assoc()) {
-                    $vorname = htmlspecialchars($row['vorname'], ENT_QUOTES, 'UTF-8');
-                    $nachname = htmlspecialchars($row['nachname'], ENT_QUOTES, 'UTF-8');
-                    $sum = number_format((float)$row['sum'], 2, ',', '.');
-        
-                    $nachricht .= "
-                    <tr>
-                        <td>$vorname</td>
-                        <td>$nachname</td>
-                        <td>" . $sum . "€</td>
-                    </tr>";
-                }
-        
-                $nachricht .= "
-                </tbody>
-            </table>
-
-            <p>Wir danken, freuen uns zusammen mit dir auf den 13.12 und wünschen dir eine frohe Vorweihnachtszeit!</p>
-            <p>Mit freundlichen Grüßen,<br>Gordon!</p>
+            <p>Deine Kosten in Höhe von<br><br>
+            ". htmlspecialchars($sum) . "€<br><br>
+            wurden voll und ganz beglichen. Wie episch!</p>
+            <p>Einige letzte Infos für dich: <br>- Der Einlass ist 19 - 20 Uhr. Bei einer Ankunft nach 20 Uhr fällt eine zusätzliche Gebühr von ".number_format($addedValue, 2, ',', '.')."€ an. <br>- Der Eröffnungstanz der 12. Klassen beginnt um 20:15 Uhr.</p>
+            
+            <p>Wir danken, freuen uns zusammen mit dir auf den 13.12 und wünschen dir eine frohe Vorweihnachtszeit!
+            Mit freundlichen Grüßen,<br>Gordon!</p>
         </body>
         </html>
     ";

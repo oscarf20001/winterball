@@ -352,12 +352,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                             }
                             return response.json();
                         })
-                        .then(data => {
-                            if (data) {
-                                const sum = `${data.open}€`;
-                                // Weitere Verarbeitung, falls nötig
-                            }
-                        })
                         .catch(error => {
                             console.error('Fehler bei der finalMail-Anfrage:', error);
                         });
