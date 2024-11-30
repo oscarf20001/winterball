@@ -329,6 +329,9 @@ if ($conn->connect_error) {
             document.getElementById("telNr0").innerText = document.getElementById("telNumber").value;
             document.getElementById("age0").innerText = document.getElementById("age").value;
             document.getElementById("claas0").innerText = document.getElementById("klasse").value;
+            if(document.getElementById("klasse").value == ''){
+                document.getElementById("claas0").innerText = "-";
+            }
             document.getElementById("count0").innerText = document.getElementById("cntTickets").value;
 
             // Ticket 01 Informationen festlegen
@@ -446,7 +449,8 @@ if ($conn->connect_error) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // LEERE FELDER PRÜFEN
-            if (empty($_POST['nachname']) || empty($_POST['vorname']) || empty($_POST['email']) || empty($_POST['telNumber']) || empty($_POST['age']) || empty($_POST['klasse']) || empty($_POST['cntTickets'])) {
+            if (empty($_POST['nachname']) || empty($_POST['vorname']) || empty($_POST['email']) || empty($_POST['telNumber']) || empty($_POST['age']) || empty($_POST['cntTickets'])) {
+                showAlert("PHP Server Error: Empty Field - Try again");
                 die('Ein oder mehrere Felder sind leer!');
             }
 
@@ -460,6 +464,10 @@ if ($conn->connect_error) {
                 $telNummerKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["telNumber"])));
                 $ageKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["age"])));
                 $klasseKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["klasse"])));
+                if($klasseKäufer == ''){
+                    $klasseKäufer = '13/0';
+                }
+                echo 'Klasse des Käufers: '.$klasseKäufer;
                 $countTicketsKäufer = htmlspecialchars($conn->real_escape_string(trim($_POST["cntTickets"])));
                 
             //ANDERE VARIABLEN
@@ -967,7 +975,7 @@ if ($conn->connect_error) {
                             Komm und feier mit uns, sei unser Gast!
                         </p>
                         <p>
-                            Du hast es gehört... die Weihnachtszeit und deine Wünsche für den Weihnachtsmann rücken näher. Wie gut, dass wir dir einen Wunsch schon jetzt erfüllen können.<br>
+                            Du hast es gehört... die Weihnachtszeit und deine Wünsche für den Weihnachtsmann rücken näher. Wie gut, dass wir dir einen Wunsch schon jetzt erfüllen können:<br>
                             DU, zusammen mit deinen Freunden, darfst auf dem Weihnachtsball dabei sein!<br>
                             Wir wollen mit dir zusammen die Weihnachtszeit einläuten. Damit alles glatt geht, komm gern jeden Dienstag und Donnerstag in jeder zweiten Pause zu uns vor die Bibliothek und besorgt dir dein Ticket!<br>
                         </p>

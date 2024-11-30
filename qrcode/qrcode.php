@@ -1,8 +1,5 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-echo __DIR__ . '/vendor/autoload.php';
-exit;
-
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
