@@ -365,3 +365,33 @@ td{
 #suggestions{
     width: 100%;
 }
+
+#controlls{
+    margin: 50px 0 0 0;
+}
+
+.Ticketshop{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#circleStatusShop.green{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: green;
+    margin: 0 0 0 20px;
+    box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.6); /* Weicher Leuchteffekt */
+    animation: glow1 1.5s infinite alternate; /* Animation für das Leuchten */
+}
+
+#circleStatusShop.red{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: red;
+    margin: 0 0 0 20px;
+    box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.6); /* Weicher Leuchteffekt */
+    animation: glow0 1.5s infinite alternate; /* Animation für das Leuchten */
+}
