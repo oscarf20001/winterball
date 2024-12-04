@@ -1,5 +1,41 @@
 <?php
-include 'db_connection.php';
+require __DIR__ . '/vendor/autoload.php';
+use Dotenv\Dotenv;
+// Lade den Composer-Autoloader
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Erstelle ein Dotenv-Objekt und lade die .env-Datei
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// SMTP-Config
+$mailHost = $_ENV['MAIL_HOST'];
+$mailUsername = $_ENV['MAIL_USERNAME'];
+$mailPassword = $_ENV['MAIL_PASSWORD'];   
+$mailPort = $_ENV['MAIL_PORT'];                   
+$mailEncryption = PHPMailer::ENCRYPTION_STARTTLS;
+
+// Greife auf die Umgebungsvariablen zu
+$dbHost = $_ENV['DB_HOST'];
+$dbDatabase = $_ENV['DB_NAME'];
+$dbUsername = $_ENV['DB_USERNAME'];
+$dbPassword = $_ENV['DB_PASSWORD'];
+
+// Erstellen einer MySQL-Verbindung mit den Umgebungsvariablen
+$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbDatabase);
+
+// Verbindung auf UTF-8 setzen
+$conn->set_charset("utf8");
+
+// Überprüfen der Verbindung
+if ($conn->connect_error) {
+    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
+}else{
+    //echo "<script>console.log('Verbindung zur Datenbank erfolgreich hergestellt!')</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -69,19 +105,19 @@ include 'db_connection.php';
                 <h3 id="headlineTicket01">Ticket Nr. <span>1</span></h3>
 
                 <div class="input-field ticketName">
-                    <input id="nameDefault" type="text" name="ticketName" required>
+                    <input type="text" name="ticketName" required>
                     <label for="ticketName">Nachame:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketVorName">
-                    <input id="prenameDefault" type="text" id="" name="ticketVorName" required>
+                    <input type="text" id="" name="ticketVorName" required>
                     <label for="ticketVorName">Vorname:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketEmail">
-                    <input id="emailDefault" type="email" id="" name="ticketEmail" required>
+                    <input type="email" id="" name="ticketEmail" required>
                     <label for="ticketEmail">Email:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketAge">
-                    <input id="ageDefault" type="text" id="" name="ticketAge" required>
+                    <input type="text" id="" name="ticketAge" required>
                     <label for="ticketAge">Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                 </div>
             </div>
