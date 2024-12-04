@@ -22,6 +22,8 @@ myconfig.yml
 testConnection.php
 
 data/*
+qrcode/*
+pdf/*
 
 senden.php
 mail.html

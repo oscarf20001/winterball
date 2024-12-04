@@ -1,41 +1,6 @@
 <!-- ADMIN PANEL -->
 <?php
-// Debugging: POST-Daten überprüfen
-error_log("POST data: " . print_r($_POST, true));
-
-// Prüfen, ob die E-Mail vorhanden ist
-if (isset($_POST['email'])) {
-    error_log("E-Mail empfangen: " . $_POST['email']);
-} else {
-    error_log("Keine E-Mail übermittelt.");
-}
-
-require __DIR__ . '/vendor/autoload.php';
-
-use Dotenv\Dotenv;
-
-// Erstelle ein Dotenv-Objekt und lade die .env-Datei
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-// Greife auf die Umgebungsvariablen zu
-$dbHost = $_ENV['DB_HOST'];
-$dbDatabase = $_ENV['DB_NAME'];
-$dbUsername = $_ENV['DB_USERNAME'];
-$dbPassword = $_ENV['DB_PASSWORD'];
-
-// Erstellen einer MySQL-Verbindung mit den Umgebungsvariablen
-$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbDatabase);
-
-// Verbindung auf UTF-8 setzen
-$conn->set_charset("utf8");
-
-// Überprüfen der Verbindung
-if ($conn->connect_error) {
-    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
-}else{
-    //echo "<script>console.log('Verbindung zur Datenbank erfolgreich hergestellt!')</script>";
-}
+include 'db_connection.php';
 
 session_start();
 
@@ -43,7 +8,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: login.php");
     exit;
 }
-
 
 ?>
 
@@ -248,7 +212,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             </form>
         </div>
     </div>
-    <div id="stat1"></div>
+    <div id="controlls">
+        <h1>Statusbericht:</h1>
+        <div class="Ticketshop">
+            <p>Ticketshop: <span id="StatusTextShop">Working and Open</span></p>
+            <div class="circleControll" id="circleStatusShop"></div>
+        </div>
+        <input type="button" value="Ticketshop Ein" id="TicketSwitch" data-state="On">
+    </div>
     <div id="stat2"></div>
     <div class="check" id="checkWindow">
         <h1>Oho welch <span style="color:#52c393;">fancytastische</span> Aktion!</h1>
@@ -284,6 +255,37 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <input type="button" value="Senden!" id="checkout_btn">
         </div>
     </div>
+
+        <?php 
+
+                    $sqlGetCurrentStateOfTicketShop = "SELECT status FROM controlls WHERE ID = 2;";
+                    $stmt = $conn->prepare($sqlGetCurrentStateOfTicketShop);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $row = $result->fetch_assoc();
+                    $currentState = $row['status'];
+                    echo "<script>let currentState = ".$currentState."
+
+                    if(0 == currentState){
+                        //FALL, WENN TICKETSHOP = 0; TICKETSHOP = AKTUELL GESCHLOSSEN
+                        TicketSwitch.dataset.state = 'Off';
+                        TicketSwitch.value = 'Ticketshop Ein';
+                        const signalLight = document.getElementById('circleStatusShop');
+                        signalLight.className = 'red';
+                        const signalText = document.getElementById('StatusTextShop');
+                        signalText.textContent = 'Closed';
+                    }else{
+                        //FALL, WENN TICKETSHOP = 1; TICKETSHOP = AKTUELL GEÖFFNET
+                        TicketSwitch.dataset.state = 'On';
+                        TicketSwitch.value = 'Ticketshop Aus';
+                        const signalLight = document.getElementById('circleStatusShop');
+                        signalLight.className = 'green';
+                        const signalText = document.getElementById('StatusTextShop');
+                        signalText.textContent = 'Open and working';
+                    }
+                    
+                    </script>";
+        ?>
 
     <script>
         document.getElementById('correction_btn').addEventListener('click', function(){
@@ -369,6 +371,71 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             //2. Eintritt -> analoge Karten oder QR-Code
             //3. Mail an alle deren open = 0 ist
 
+        });
+
+        const TicketSwitch = document.getElementById('TicketSwitch');
+        TicketSwitch.addEventListener('click', function(){
+            console.log(TicketSwitch.dataset.state)
+
+            switch (TicketSwitch.dataset.state) {
+                case "On":
+                    TicketSwitch.dataset.state = "Off";
+                    TicketSwitch.value = "Ticketshop Ein";
+
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOff',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+
+                    signalLight = document.getElementById('circleStatusShop');
+                    signalLight.className = 'red';
+                    signalText = document.getElementById('StatusTextShop');
+                    signalText.textContent = 'Closed';
+
+                    break;
+                case "Off":
+                    TicketSwitch.dataset.state = "On";
+                    TicketSwitch.value = "Ticketshop Aus";
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOn',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+
+                    signalLight = document.getElementById('circleStatusShop');
+                    signalLight.className = 'green';
+                    signalText = document.getElementById('StatusTextShop');
+                    signalText.textContent = 'Open and working';
+
+                    break;
+                default:
+                    break;
+            }
         });
 
     </script>

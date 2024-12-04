@@ -1,43 +1,5 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-use Dotenv\Dotenv;
-// Lade den Composer-Autoloader
-require 'vendor/autoload.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-// Erstelle ein Dotenv-Objekt und lade die .env-Datei
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-// SMTP-Config
-$mailHost = $_ENV['MAIL_HOST'];
-$mailUsername = $_ENV['MAIL_USERNAME'];
-$mailPassword = $_ENV['MAIL_PASSWORD'];   
-$mailPort = $_ENV['MAIL_PORT'];                   
-$mailEncryption = PHPMailer::ENCRYPTION_STARTTLS;
-
-
-// Greife auf die Umgebungsvariablen zu
-$dbHost = $_ENV['DB_HOST'];
-$dbDatabase = $_ENV['DB_NAME'];
-$dbUsername = $_ENV['DB_USERNAME'];
-$dbPassword = $_ENV['DB_PASSWORD'];
-
-// Erstellen einer MySQL-Verbindung mit den Umgebungsvariablen
-$conn = new mysqli($dbHost, $dbUsername, $dbPassword, $dbDatabase);
-
-// Verbindung auf UTF-8 setzen
-$conn->set_charset("utf8");
-
-// Überprüfen der Verbindung
-if ($conn->connect_error) {
-    die("Verbindung fehlgeschlagen: " . $conn->connect_error);
-}else{
-    //echo "<script>console.log('Verbindung zur Datenbank erfolgreich hergestellt!')</script>";
-}
-
+include 'db_connection.php';
 ?>
 
 <!DOCTYPE html>
@@ -107,19 +69,19 @@ if ($conn->connect_error) {
                 <h3 id="headlineTicket01">Ticket Nr. <span>1</span></h3>
 
                 <div class="input-field ticketName">
-                    <input type="text" name="ticketName" required>
+                    <input id="nameDefault" type="text" name="ticketName" required>
                     <label for="ticketName">Nachame:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketVorName">
-                    <input type="text" id="" name="ticketVorName" required>
+                    <input id="prenameDefault" type="text" id="" name="ticketVorName" required>
                     <label for="ticketVorName">Vorname:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketEmail">
-                    <input type="email" id="" name="ticketEmail" required>
+                    <input id="emailDefault" type="email" id="" name="ticketEmail" required>
                     <label for="ticketEmail">Email:<sup>*</sup></label>
                 </div>
                 <div class="input-field ticketAge">
-                    <input type="text" id="" name="ticketAge" required>
+                    <input id="ageDefault" type="text" id="" name="ticketAge" required>
                     <label for="ticketAge">Alter:<sup>* Zum Zeitpunkt des Balls</sup></label>
                 </div>
             </div>
@@ -211,7 +173,7 @@ if ($conn->connect_error) {
         <div class="notePoints">
             <p>- Der Käufer steht für seine gekauften Tickets in der Veranwortung</p>
             <p>- Keine Anmeldung unter 16 Jahren</p>
-            <p>- Zahlung in Bar an Raphael Stark oder Oscar Streich persönlich (Zeitpunkt für Bezahlung wird noch bekannt gegeben)</p>
+            <p>- Zahlung in Bar an Raphael Stark oder Oscar Streich persönlich</p>
             <br>
             <p>- Durch klicken auf "OK" erklären Sie sich einverstanden mit oben genannten Punkten</p>
         </div>
@@ -295,6 +257,22 @@ if ($conn->connect_error) {
                         </div>
                     `;
                     ticketsContainer.appendChild(ticketDiv);
+
+                    if(false == <?php
+                                        //Überprüfe, ob Ticketing noch aktiv ist: 
+                                        $sqlGetStatusTicketing = "SELECT status FROM controlls WHERE Service = 'Shop';";
+                                        $stmt = $conn->prepare($sqlGetStatusTicketing);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        $row = $result->fetch_assoc();
+                                        if($row['status'] == 0){
+                                            echo "false";
+                                        }else{
+                                            echo "true";
+                                }?>)
+                    {
+                        closeTicketing();
+                    }
                 }else{
                     console.log("Ungültige Anzahl");
                 }
@@ -440,10 +418,38 @@ if ($conn->connect_error) {
             });
         }
 
+        function closeTicketing(){
+            const classLists = ["name", "vorname", "email", "telNumber", "age", "klasse", "cntTickets", "name01", "prename01", "mail01", "age01", "checkData"];
+
+            for(i = 0;i<classLists.length;i++){
+                document.getElementById(classLists[i]).disabled = true;
+                document.getElementById(classLists[i]).classList.add('closed');
+            }
+            document.getElementById("checkData").classList.add("closedHover");
+
+            //CREATE CLOSING BANNER
+            const banner = document.createElement("div");
+            banner.classList.add("closingBanner");
+            banner.innerHTML = "Aktuell ist der Ticketshop geschlossen! Bei wichtigen Anfragen melden Sie sich bitte bei dieser Email-Adresse: streiosc@curiegym.de";
+
+            //CLOSING BANNER HINZUFÜGEN
+            const body = document.querySelector('body');
+            body.prepend(banner);
+        }
 
     </script>
 
     <?php
+
+    //Überprüfe, ob Ticketing noch aktiv ist: 
+    $sqlGetStatusTicketing = "SELECT status FROM controlls WHERE Service = 'Shop';";
+    $stmt = $conn->prepare($sqlGetStatusTicketing);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if($row['status'] == 0){
+        die;
+    }
 
         //DATEN AUS DEM FORMULAR ABRUFEN
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
