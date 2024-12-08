@@ -95,7 +95,7 @@ for ($i=0; $i < count($allMails); $i++) {
         </head>
         <body>
             <p>Hey " . htmlspecialchars($nameKäufer, ENT_QUOTES, 'UTF-8') . ",</p>
-            <p><em>OMG‼️‼️‼️</em></p>
+            <p><em><strong>OMG‼️‼️‼️</strong></em></p>
                         <p>
                             Am Freitag ist es so weit und der Winterball wird endlich stattfinden❤️‍🩹🥳
                         </p>
@@ -106,7 +106,7 @@ for ($i=0; $i < count($allMails); $i++) {
                             Montag, 3. Pause<br>
                             Dienstag, 2. & 3. Pause<br>
                             Mittwoch, 2. & 3. Pause<br>
-                            Am Donnerstag findet voraussichtlich KEIN Verkauf mehr statt!!!<br>
+                            Am Donnerstag findet voraussichtlich <strong>KEIN</strong> Verkauf mehr statt!!!<br>
                         </p>
                         <p>Hier nochmal eine kleine Übersicht deiner Reservierung:</p>
                         <table>
@@ -123,7 +123,7 @@ for ($i=0; $i < count($allMails); $i++) {
                         <p>
                             <strong>IBAN:</strong> ".$iban."<br>
                             <strong>Name:</strong> Felix Wernecke<br>
-                            <strong>Verwendungszweck:</strong> \"". $emailKäufer ." Winterball\"
+                            <strong>Verwendungszweck:</strong> \"". str_replace("@", "at", $emailKäufer)." Winterball\"
                         </p>
                         <p>Wir freuen uns sehr auf euren Beitrag für den fancytastischen Winterball🤑💕</p>
                         <p>Allerliebste Grüße sendet euch,<br>Gordon</p>
@@ -151,9 +151,9 @@ for ($i=0; $i < count($allMails); $i++) {
 
             // E-Mail-Inhalt
             $mail->isHTML(true);
-            $mail->Subject = 'Buchungsbestätigung Winterball';
+            $mail->Subject = 'LETZTE CHANCE für den Winterball';
             $mail->Body = $nachricht;
-            $mail->AltBody = 'Dies ist der Klartext-Inhalt der E-Mail.';
+            $mail->AltBody = 'Bitte begleiche deine offene Summe für den Winterball des MCG';
 
             // E-Mail senden
             if ($mail->send()) {
