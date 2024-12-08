@@ -170,6 +170,8 @@ for ($i=0; $i < count($allMails); $i++) {
             echo "Fehler beim Senden der E-Mail an $emailKäufer: {$mail->ErrorInfo}\n";
         }
     }
+    echo "\n";
+    echo "<br>";
 }
 
 fclose($logHandle);
