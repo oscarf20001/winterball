@@ -39,7 +39,7 @@ if ($conn->connect_error) {
 
 //ALLE KÄUFER MAILS GÖNNEEEENN !!!!!!!!!!!! LIMIT STATEMENT ENTFERNEN, WENN IN PRODUCTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #$sqlGetAllMails = "SELECT email, vorname, nachname, open FROM käufer WHERE email LIKE '%@gmail.com' AND ID >= 86 LIMIT 0";
-$sqlGetAllMails = "SELECT email, vorname, nachname, open FROM testdata WHERE open > 0";
+$sqlGetAllMails = "SELECT email, vorname, nachname, open FROM käufer WHERE open > 0";
 $stmt = $conn->prepare($sqlGetAllMails);
 $stmt->execute();
 $result = $stmt->get_result();
