@@ -100,7 +100,7 @@ for ($i=0; $i < count($allMails); $i++) {
                             Am Freitag ist es so weit und der Winterball wird endlich stattfinden❤️‍🩹🥳
                         </p>
                         <p>
-                            Für alle, die bisher noch nicht bezahlt haben haben wir insgesamt noch fünf Möglichkeiten dafür:
+                            Für alle, die bisher noch nicht bezahlt haben, bieten wir insgesamt noch fünf Möglichkeiten dafür:
                         </p>
                         <p>
                             Montag, 3. Pause<br>
@@ -126,7 +126,7 @@ for ($i=0; $i < count($allMails); $i++) {
                             <strong>Verwendungszweck:</strong> \"". str_replace("@", "at", $emailKäufer)." Winterball\"
                         </p>
                         <p>Wir freuen uns sehr auf euren Beitrag für den fancytastischen Winterball🤑💕</p>
-                        <p>Allerliebste Grüße sendet euch,<br>Gordon</p>
+                        <p>Allerliebste Grüße sendet euch,<br>Gordon :)</p>
         </body>
     </html>";
 
