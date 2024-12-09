@@ -13,7 +13,7 @@ $builder = new Builder(
     writer: new PngWriter(),
     writerOptions: [],
     validateResult: false,
-    data: 'Test',
+    data: 'Rapha',
     encoding: new Encoding('UTF-8'),
     errorCorrectionLevel: ErrorCorrectionLevel::High,
     size: 300,
