@@ -369,28 +369,82 @@ td{
     margin: 50px 0 0 0;
 }
 
-.Ticketshop{
+#ticketshop{
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100vw;
 }
 
-#circleStatusShop.green{
+#ticketshop table{
+    width: 100%;
+    border-collapse: collapse; /* Entfernt die Zwischenräume */
+}
+
+#ticketshop table tr{
+    height: auto; /* Automatische Höhenanpassung */
+    position: relative;
+}
+
+#ticketshop table thead{
+    background-color: rgba(255,255,255,0.2);
+}
+
+#ticketshop table thead th{
+    padding: 10px;
+}
+
+#ticketshop table tr td{
+    vertical-align: middle; /* Inhalte vertikal zentrieren */
+    text-align: center; /* Inhalte horizontal zentrieren */
+    padding: 10px; /* Optionaler Innenabstand */
+}
+
+#circleTableOuter .circleTableOuter{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+
+table .controllInput{
+    width: 33%;
+}
+
+table .descriptionStatus{
+    width: 33%;
+}
+
+#ticketshop #circleStatusShop,#circleStatusEinlass,#circleStatusAbendkasse{
+    margin: auto; /* Stellt sicher, dass der Kreis im Zentrum steht */
+}
+
+#circleStatusShop.green,
+#circleStatusEinlass.green,
+#circleStatusAbendkasse.green{
     height: 10px;
     width: 10px;
     border-radius: 50%;
     background-color: green;
-    margin: 0 0 0 20px;
+    margin: auto;
     box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.6); /* Weicher Leuchteffekt */
     animation: glow1 1.5s infinite alternate; /* Animation für das Leuchten */
 }
 
-#circleStatusShop.red{
+#circleStatusShop.red,
+#circleStatusEinlass.red,
+#circleStatusAbendkasse.red{
     height: 10px;
     width: 10px;
     border-radius: 50%;
     background-color: red;
-    margin: 0 0 0 20px;
+    margin: auto;
     box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.6); /* Weicher Leuchteffekt */
     animation: glow0 1.5s infinite alternate; /* Animation für das Leuchten */
+}
+
+.statusBerichte{
+    margin: 50px 0 15px 0;
 }

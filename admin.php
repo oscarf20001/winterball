@@ -194,7 +194,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
         <div class="checkOutTicket">
             <h2>Einen Käufer abrechnen</h2>
-            <p>Hier den Betrag eingeben, welchen der Käufer beglichen hat. Die beglichenen Kosten werden in den Datensatz der vorher eingegebenen Email hinzugefügt. Zusätzlich die Methode auswählen. Standardmethode ist "Bar".</p>
+            <p>Hier den Betrag eingeben, welchen der Käufer beglichen hat. Die beglichenen Kosten werden in den Datensatz der vorher eingegebenen Email hinzugefügt. Zusätzlich bitte unbedingt die Methode auswählen => sonst keine Mail an Käufer.</p>
             <form class="sendMoneyContainer" id="sendMoneyForm">
                 <div class="input-field euro">
                     <input type="number" name="t-paid" id="t-paid" step="0.01" min="0" required>
@@ -212,13 +212,40 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             </form>
         </div>
     </div>
-    <div id="controlls">
+    <div class="statusBerichte">
         <h1>Statusbericht:</h1>
-        <div class="Ticketshop">
-            <p>Ticketshop: <span id="StatusTextShop">Working and Open</span></p>
-            <div class="circleControll" id="circleStatusShop"></div>
+        <div id="ticketshop">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th class="controllInput">Controll</th>
+                        <th class="descriptionStatus">Beschreibung</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="vertical-align: middle;">
+                        <td>Ticketshop</td>
+                        <td class="controllInput"><input type="button" value="Ticketshop Ein" id="TicketSwitch" data-state="On"></td>
+                        <td class="descriptionStatus" id="StatusTextShop"></td>
+                        <td class="circleTableOuter"><div class="circleControll" id="circleStatusShop"></div></td>
+                    </tr>
+                    <tr style="vertical-align: middle;">
+                        <td>Einlass (QR-Codes)</td>
+                        <td class="controllInput"><input type="button" value="Einlass Ein" id="EinlassSwitch" data-state="On"></td>
+                        <td class="descriptionStatus" id="StatusTextEinlass"></td>
+                        <td class="circleTableOuter"><div class="circleControll" id="circleStatusEinlass"></div></td>
+                    </tr>
+                    <tr style="vertical-align: middle;">
+                        <td>Abendkasse (+2,5€)</td>
+                        <td class="controllInput"><input type="button" value="Abendkasse Ein" id="AbendkasseSwitch" data-state="On"></td>
+                        <td class="descriptionStatus" id="StatusTextAbendkasse"></td>
+                        <td class="circleTableOuter"><div class="circleControll" id="circleStatusAbendkasse"></div></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <input type="button" value="Ticketshop Ein" id="TicketSwitch" data-state="On">
     </div>
     <div id="stat2"></div>
     <div class="check" id="checkWindow">
@@ -263,25 +290,83 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     $stmt->execute();
                     $result = $stmt->get_result();
                     $row = $result->fetch_assoc();
-                    $currentState = $row['status'];
-                    echo "<script>let currentState = ".$currentState."
+                    $currentStateTicket = $row['status'];
+                    echo "<script>let currentStateShop = ".$currentStateTicket."
 
-                    if(0 == currentState){
+                    if(0 == currentStateShop){
                         //FALL, WENN TICKETSHOP = 0; TICKETSHOP = AKTUELL GESCHLOSSEN
                         TicketSwitch.dataset.state = 'Off';
                         TicketSwitch.value = 'Ticketshop Ein';
-                        const signalLight = document.getElementById('circleStatusShop');
-                        signalLight.className = 'red';
+                        const signalLightShop = document.getElementById('circleStatusShop');
+                        signalLightShop.className = 'red';
                         const signalText = document.getElementById('StatusTextShop');
                         signalText.textContent = 'Closed';
                     }else{
                         //FALL, WENN TICKETSHOP = 1; TICKETSHOP = AKTUELL GEÖFFNET
                         TicketSwitch.dataset.state = 'On';
                         TicketSwitch.value = 'Ticketshop Aus';
-                        const signalLight = document.getElementById('circleStatusShop');
-                        signalLight.className = 'green';
+                        const signalLightShop = document.getElementById('circleStatusShop');
+                        signalLightShop.className = 'green';
                         const signalText = document.getElementById('StatusTextShop');
                         signalText.textContent = 'Open and working';
+                    }
+                    
+                    </script>";
+                    $stmt->close();
+
+                    $sqlGetCurrentStateOfEinlass = "SELECT status FROM controlls WHERE ID = 1;";
+                    $stmt = $conn->prepare($sqlGetCurrentStateOfEinlass);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $row = $result->fetch_assoc();
+                    $currentStateEinlass = $row['status'];
+                    echo "<script>let currentStateEinlass = ".$currentStateEinlass."
+
+                    if(0 == currentStateEinlass){
+                        //FALL, WENN EINLASS = 0; TICKETSHOP = AKTUELL GESCHLOSSEN
+                        EinlassSwitch.dataset.state = 'Off';
+                        EinlassSwitch.value = 'Einlass Ein';
+                        const signalLightEinlass = document.getElementById('circleStatusEinlass');
+                        signalLightEinlass.className = 'red';
+                        const signalTextEinlass = document.getElementById('StatusTextEinlass');
+                        signalTextEinlass.textContent = 'Veranstaltung geschlossen';
+                    }else{
+                        //FALL, WENN EINLASS = 1; TICKETSHOP = AKTUELL GEÖFFNET
+                        EinlassSwitch.dataset.state = 'On';
+                        EinlassSwitch.value = 'Einlass Aus';
+                        const signalLightEinlass = document.getElementById('circleStatusEinlass');
+                        signalLightEinlass.className = 'green';
+                        const signalTextEinlass = document.getElementById('StatusTextEinlass');
+                        signalTextEinlass.textContent = 'Veranstaltung offen';
+                    }
+                    
+                    </script>";
+                    $stmt->close();
+
+                    $sqlGetCurrentStateOfAbendkasse = "SELECT status FROM controlls WHERE ID = 3;";
+                    $stmt = $conn->prepare($sqlGetCurrentStateOfAbendkasse);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $row = $result->fetch_assoc();
+                    $currentStateAbendkasse = $row['status'];
+                    echo "<script>let currentStateAbendkasse = ".$currentStateAbendkasse."
+
+                    if(0 == currentStateAbendkasse){
+                        //FALL, WENN Abendkasse = 0; TICKETSHOP = AKTUELL GESCHLOSSEN
+                        AbendkasseSwitch.dataset.state = 'Off';
+                        AbendkasseSwitch.value = 'Abendkasse Ein';
+                        const signalLight = document.getElementById('circleStatusAbendkasse');
+                        signalLight.className = 'red';
+                        const signalText = document.getElementById('StatusTextAbendkasse');
+                        signalText.textContent = 'Zuschlag deaktiviert';
+                    }else{
+                        //FALL, WENN Abendkasse = 1; TICKETSHOP = AKTUELL GEÖFFNET
+                        AbendkasseSwitch.dataset.state = 'On';
+                        AbendkasseSwitch.value = 'Abendkasse Aus';
+                        const signalLightAbendkasse = document.getElementById('circleStatusAbendkasse');
+                        signalLightAbendkasse.className = 'green';
+                        const signalTextAbendkasse = document.getElementById('StatusTextAbendkasse');
+                        signalTextAbendkasse.textContent = 'Zuschlag aktiviert';
                     }
                     
                     </script>";
@@ -366,13 +451,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 console.error('Fehler:', error);
                 alert('Fehler bei der Kommunikation mit dem Server.');
             });
-
-            //1. Mail mit generel information
-            //2. Eintritt -> analoge Karten oder QR-Code
-            //3. Mail an alle deren open = 0 ist
-
         });
 
+        // CONTROLLS ==============
         const TicketSwitch = document.getElementById('TicketSwitch');
         TicketSwitch.addEventListener('click', function(){
             console.log(TicketSwitch.dataset.state)
@@ -388,7 +469,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: 'action=toggleOff',  // Parameter, um die Aktion zu spezifizieren
+                        body: 'action=toggleOff&service=2',  // Parameter, um die Aktion zu spezifizieren
                     })
                     .then(response => response.json())  // Antwort wird als JSON erwartet
                     .then(data => {
@@ -400,8 +481,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     })
                     .catch(error => console.error('Fehler bei der Anfrage:', error));
 
-                    signalLight = document.getElementById('circleStatusShop');
-                    signalLight.className = 'red';
+                    signalLightShop = document.getElementById('circleStatusShop');
+                    signalLightShop.className = 'red';
                     signalText = document.getElementById('StatusTextShop');
                     signalText.textContent = 'Closed';
 
@@ -415,7 +496,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: 'action=toggleOn',  // Parameter, um die Aktion zu spezifizieren
+                        body: 'action=toggleOn&service=2',  // Parameter, um die Aktion zu spezifizieren
                     })
                     .then(response => response.json())  // Antwort wird als JSON erwartet
                     .then(data => {
@@ -427,8 +508,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     })
                     .catch(error => console.error('Fehler bei der Anfrage:', error));
 
-                    signalLight = document.getElementById('circleStatusShop');
-                    signalLight.className = 'green';
+                    signalLightShop = document.getElementById('circleStatusShop');
+                    signalLightShop.className = 'green';
                     signalText = document.getElementById('StatusTextShop');
                     signalText.textContent = 'Open and working';
 
@@ -438,6 +519,149 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             }
         });
 
+        const EinlassSwitch = document.getElementById('EinlassSwitch');
+        EinlassSwitch.addEventListener('click', function(){
+            console.log(EinlassSwitch.dataset.state)
+
+            switch (EinlassSwitch.dataset.state) {
+                case "On":
+                    EinlassSwitch.dataset.state = "Off";
+                    EinlassSwitch.value = "Einlass Ein";
+
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOff&service=1',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+
+                    
+                    signalLightEinlass = document.getElementById('circleStatusEinlass');
+                    signalLightEinlass.className = 'red';
+                    signalTextEinlass = document.getElementById('StatusTextEinlass');
+                    signalTextEinlass.textContent = 'Veranstaltung geschlossen';
+                    break;
+                case "Off":
+                    EinlassSwitch.dataset.state = "On";
+                    EinlassSwitch.value = "Einlass Aus";
+
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOn&service=1',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+                
+                    signalLightEinlass = document.getElementById('circleStatusEinlass');
+                    signalLightEinlass.className = 'green';
+                    signalTextEinlass = document.getElementById('StatusTextEinlass');
+                    signalTextEinlass.textContent = 'Einlass läuft...';
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        const AbendkasseSwitch = document.getElementById('AbendkasseSwitch');
+        AbendkasseSwitch.addEventListener('click', function(){
+            console.log(AbendkasseSwitch.dataset.state)
+
+            switch (AbendkasseSwitch.dataset.state) {
+                case "On":
+                    AbendkasseSwitch.dataset.state = "Off";
+                    AbendkasseSwitch.value = "Abendkasse Ein";
+
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOff&service=3',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+
+                    signalLightAbendkasse = document.getElementById('circleStatusAbendkasse');
+                    signalLightAbendkasse.className = 'red';
+                    signalTextAbendkasse = document.getElementById('StatusTextAbendkasse');
+                    signalTextAbendkasse.textContent = 'Zuschlag Deaktiviert';
+                    break;
+                case "Off":
+                    AbendkasseSwitch.dataset.state = "On";
+                    AbendkasseSwitch.value = "Abendkasse Aus";
+
+                    // AJAX-Anfrage an PHP, um die Datenbank zu aktualisieren
+                    fetch('toggle_ticketshop.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'action=toggleOn&service=3',  // Parameter, um die Aktion zu spezifizieren
+                    })
+                    .then(response => response.json())  // Antwort wird als JSON erwartet
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Datenbank erfolgreich aktualisiert.");
+                        } else {
+                            console.error("Fehler bei der Aktualisierung der Datenbank.");
+                        }
+                    })
+                    .catch(error => console.error('Fehler bei der Anfrage:', error));
+
+                    signalLightAbendkasse = document.getElementById('circleStatusAbendkasse');
+                    signalLightAbendkasse.className = 'green';
+                    signalTextAbendkasse = document.getElementById('StatusTextAbendkasse');
+                    signalTextAbendkasse.textContent = 'Zuschlag aktiv';
+                    break;
+                default:
+                    break;
+            }
+        });
     </script>
 </body>
 </html>
+    <!--
+    
+        1. Boolean für Einlass mit QR-Codes. Wenn gescannt = 1, wenn nicht = 0 => entspricht Einlasskontrolle für einmaliges Scannen eines Codes
+        1.1 Timestamp für Einlass
+        1.2 Boolean für Zuschlag => wird automatisch aktiv, wenn nach 20 Uhr
+        2. Warteliste
+        3. dynamische Ticketpreisanpassung mit Zuschlag
+        3.1 neue Tickets mit +2,5€ versehen
+        3.2 bei Einlass nach 20 Uhr auf Display "+2,5€" eingeben
+        4. QR-Codes generieren
+        4.1 QR-Codes verschicken (Mittwoch-Abend => Testlauf Dienstag Abend - Mittwoch Abend)
+        5. Donnerstag Tickets klären bzw. löschen
+        6. Mail Kill-Switch für Veranstaltungsende
+
+    -->
