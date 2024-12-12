@@ -100,10 +100,10 @@ body .outer .content .eintrittCheck span.allowed{
     }
 
     body .outer .content .containerTicket p{
-        width: 150px;
+        width: 100px;
     }
     
     body .outer .content .eintrittCheck p{
-        width: 150px;
+        width: 100px;
     }
 }
