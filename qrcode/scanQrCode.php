@@ -71,6 +71,16 @@ include '../db_connection.php';
             </div>
         </div>
     </div>
+
+    <!--<div class="formular">
+        <form action="#" method="post">
+            <input type="hidden" name="action" value="einlass">
+            <input type="email" name="email" placeholder="email" id="formTicketMail">
+            <input type="text" name="nachname" placeholder="nachname" id="formTicketName">
+            <input type="text" name="vorname" placeholder="name" id="formTicketVorName">
+            <input type="submit" value="Einlass!">
+        </form>
+    </div>-->
 </body>
 </html>
 
@@ -182,9 +192,26 @@ if (isset($_GET['action'])) {
         return;
     }
 } else {
-    echo "Keine Aktion angegeben!";
+    #echo "Keine Aktion angegeben!";
     return;
 }
+
+#if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+#    if(isset($_POST['action'])){
+#        $action = $_POST['action'];
+#        if($action === 'einlass'){
+#            echo $email = $_POST['email'];
+#            echo $name = $_POST['nachname'];
+#            echo $prename = $_POST['vorname'];
+#        }else{
+#            echo "Unbekannte Aktion; Einlass ungültig";
+#            return;
+#        }
+#    }else{
+#        echo "Keine Aktion angegeben!";
+#        return;
+#    }
+#}
 
 function buildUI($id,$name,$vorname,$mail,$booleanEinlass,$booleanZuschlag){
 

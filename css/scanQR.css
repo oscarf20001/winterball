@@ -85,3 +85,17 @@ body .outer .content .eintrittCheck span.denied{
 body .outer .content .eintrittCheck span.allowed{
     color: green;
 }
+
+@media screen and (max-width: 768px){
+    body .outer{
+        border: 5px solid white;
+        background-color: #081b4b;
+        border-radius: 10px;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        padding: 20px;
+    }
+}
