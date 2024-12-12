@@ -91,7 +91,6 @@ body .outer .content .eintrittCheck span.allowed{
         border: 10px solid white;
         border-width: 10px !important;
         background-color: #081b4b;
-        border-radius: 10px;
         height: 100%;
         width: 100%;
         display: flex;
