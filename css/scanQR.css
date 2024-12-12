@@ -88,7 +88,8 @@ body .outer .content .eintrittCheck span.allowed{
 
 @media screen and (max-width: 768px){
     body .outer{
-        border: 5px solid white;
+        border: 10px solid white;
+        border-width: 10px !important;
         background-color: #081b4b;
         border-radius: 10px;
         height: 100%;
@@ -97,5 +98,13 @@ body .outer .content .eintrittCheck span.allowed{
         flex-direction: column;
         color: white;
         padding: 20px;
+    }
+
+    body .outer .content .containerTicket p{
+        width: 150px;
+    }
+    
+    body .outer .content .eintrittCheck p{
+        width: 150px;
     }
 }
