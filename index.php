@@ -36,6 +36,11 @@ if ($conn->connect_error) {
 }else{
     //echo "<script>console.log('Verbindung zur Datenbank erfolgreich hergestellt!')</script>";
 }
+
+$zuschlag = 2.50;
+$checktimestamp = 1734116400;
+$checktimestamp = time();
+
 ?>
 
 <!DOCTYPE html>
@@ -519,6 +524,14 @@ if ($conn->connect_error) {
 
                 $priceIntern = 12.00;
                 $priceExtern = 15.00;
+
+                if(time() >= $checktimestamp){
+                    $priceIntern = 12.00 + $zuschlag;
+                    $priceExtern = 15.00 + $zuschlag;
+                }
+
+                echo "<script>console.log('Intern: '".$priceIntern.")</script>";
+                echo "<script>console.log('Extern: '".$priceExtern.")</script>";
 
             if($countTicketsKäufer == 2){
                 

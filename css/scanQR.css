@@ -1,0 +1,87 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#outer.bg-red{
+    border: 5px solid red;
+}
+
+#outer.bg-green{
+    border: 5px solid green;
+}
+
+body{
+    /*background: linear-gradient(135deg, #081b4b,#09192D);*/
+    background-color: #081b4b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+body .outer{
+    border: 5px solid white;
+    background-color: #081b4b;
+    border-radius: 10px;
+    height: 50%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    padding: 20px;
+}
+
+body .outer .header{
+    height: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body .outer .content{
+    height: 85%;
+}
+
+body .outer .content .stats{
+    margin: 0 0 25px 0;
+}
+
+body .outer .content .containerTicket{
+    display: block;
+}
+
+body .outer .content .eintrittCheck{
+    display: block;
+    margin: 20px 0 0 0;
+}
+
+body .outer .content .containerTicket .flex-element{
+    display: flex;
+    flex-direction: row;
+}
+
+body .outer .content .eintrittCheck .flex-element{
+    display: flex;
+    flex-direction: row;
+}
+
+body .outer .content .containerTicket p{
+    width: 200px;
+}
+
+body .outer .content .eintrittCheck p{
+    width: 200px;
+}
+
+body .outer .content .eintrittCheck span.denied{
+    color: red;
+}
+
+body .outer .content .eintrittCheck span.allowed{
+    color: green;
+}

@@ -23,8 +23,9 @@ testConnection.php
 
 data/*
 data/
-qrcode/*
-qrcode/
+qrcode/codes/
+qrcode/generate_qrcode.php
+qrcode/codes/*
 pdf/*
 pdf/
 graphics/

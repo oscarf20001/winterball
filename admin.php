@@ -652,16 +652,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 </html>
     <!--
     
-        1. Boolean für Einlass mit QR-Codes. Wenn gescannt = 1, wenn nicht = 0 => entspricht Einlasskontrolle für einmaliges Scannen eines Codes
-        1.1 Timestamp für Einlass
-        1.2 Boolean für Zuschlag => wird automatisch aktiv, wenn nach 20 Uhr
+        ✅ 1. Boolean für Einlass mit QR-Codes. Wenn gescannt = 1, wenn nicht = 0 => entspricht Einlasskontrolle für einmaliges Scannen eines Codes
+        ✅ 1.1 Timestamp für Einlass
+        ✅ 1.2 Boolean für Zuschlag => wird automatisch aktiv, wenn nach 20 Uhr
         2. Warteliste
         3. dynamische Ticketpreisanpassung mit Zuschlag
-        3.1 neue Tickets mit +2,5€ versehen
+        ✅ 3.1 neue Tickets mit +2,5€ versehen
         3.2 bei Einlass nach 20 Uhr auf Display "+2,5€" eingeben
         4. QR-Codes generieren
         4.1 QR-Codes verschicken (Mittwoch-Abend => Testlauf Dienstag Abend - Mittwoch Abend)
-        5. Donnerstag Tickets klären bzw. löschen
+        - 5. Donnerstag Tickets klären bzw. löschen
         6. Mail Kill-Switch für Veranstaltungsende
-
+        7. Support in Mail und Web
+        7.1 Weitere wichtige allgemeine spezielle Infos in Mails (siehe Chat Rapha)
     -->
