@@ -142,7 +142,8 @@ if (isset($_GET['action'])) {
             if(checkPaidStatusCustomer($idTicketScannedQrCode,$conn) === 1){
                 //Definiere Variablen für Zuschlag, falls nach 20:00 Uhr
                 $zuschlag = 2.50;
-                $checktimestamp = 1734116400;
+                #$checktimestamp = 1734116400;
+                $checktimestamp = time();
 
                 //UPDATE Table mit dieser ID => Set Einlass to 1 (QR-Code wurde gescannt!)
                 $tsEinlass = time();
@@ -177,6 +178,12 @@ if (isset($_GET['action'])) {
                     document.getElementById('einlass').classList.remove('allowed');
                     document.getElementById('reason').innerText = 'Unbezahlte Tickets auf Käufer!';
                 </script>";
+
+            $zuschlagHinweis = "Bitte 2,5€ abkassieren! - IMPORTANT";
+            if ($booleanZuschlag) {
+                echo "<script>alert('" . addslashes($zuschlagHinweis) . "');</script>";
+            }
+
             makeBg(true);
             return;
         }else{

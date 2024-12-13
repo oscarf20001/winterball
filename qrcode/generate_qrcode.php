@@ -217,8 +217,9 @@ while ($row = $result->fetch_assoc()) {
     $ids[] = $row['ID'];
 }
 
+$count = 0;
 //ENTFERNEN, WENN IN PRODUKTION: 
-
+$ids = [1000];
 
 if(count($ids) > 0){
     $sql = "SELECT vorname, nachname, email FROM tickets WHERE ID = ? LIMIT 1";

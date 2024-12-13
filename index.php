@@ -39,7 +39,6 @@ if ($conn->connect_error) {
 
 $zuschlag = 2.50;
 $checktimestamp = 1734116400;
-$checktimestamp = time();
 
 ?>
 
